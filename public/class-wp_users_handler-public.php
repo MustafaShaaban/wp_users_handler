@@ -40,6 +40,7 @@ class Wp_users_handler_Public {
 	 */
 	private $version;
 
+	public $users_front;
 	/**
 	 * Initialize the class and set its properties.
 	 *
@@ -51,6 +52,8 @@ class Wp_users_handler_Public {
 
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
+
+        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-users_front.php';
 
 	}
 
