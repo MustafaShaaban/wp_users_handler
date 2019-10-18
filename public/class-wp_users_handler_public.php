@@ -75,8 +75,8 @@
 
             $this->plugin_name = $plugin_name;
             $this->version     = $version;
-            $this->css         = PLUGIN_PATH.'public/css/';
-            $this->js          = PLUGIN_PATH.'public/js/';
+            $this->css         = PLUGIN_URL.'public/css/';
+            $this->js          = PLUGIN_URL.'public/js/';
 
             require_once PLUGIN_PATH.'public/class-profile_public.php';
             require_once PLUGIN_PATH.'public/class-users_public.php';
@@ -104,7 +104,6 @@
              */
 
             wp_enqueue_style($this->plugin_name, $this->css.'wp_users_handler-public.css', array(), $this->version, 'all');
-
         }
 
         /**
@@ -128,7 +127,23 @@
              */
 
             wp_enqueue_script($this->plugin_name, $this->js.'wp_users_handler-public.js', array('jquery'), $this->version, false);
-
+            wp_localize_script($this->plugin_name, 'pl_globals', array(
+                'ajaxUrl'  => admin_url('admin-ajax.php')
+            ));
+            wp_localize_script($this->plugin_name, 'pl_phrases', array(
+                'pl_key'        => PLUGIN_KEY,
+                'default'        => __("This field is required.", "wp_users_handler"),
+                'email'          => __("Please enter a valid email address.", "wp_users_handler"),
+                'number'         => __("Please enter a valid number.", "wp_users_handler"),
+                'equalTo'        => __("Please enter the same value again.", "wp_users_handler"),
+                'maxlength'      => __("Please enter no more than {0} characters.", "wp_users_handler"),
+                'minLength'      => __("Please enter at least {0} characters.", "wp_users_handler"),
+                'max'            => __("Please enter a value less than or equal to {0}.", "wp_users_handler"),
+                'min'            => __("Please enter a value greater than or equal to {0}.", "wp_users_handler"),
+                'pass_regex'     => __("Password doesn't complexity.", "wp_users_handler"),
+                'phone_regex'    => __("Please enter a valid Phone number.", "wp_users_handler"),
+                'email_regex'    => __("Please enter a valid email address.", "wp_users_handler"),
+            ));
         }
 
     }

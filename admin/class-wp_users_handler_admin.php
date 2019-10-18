@@ -75,8 +75,8 @@
 
             $this->plugin_name = $plugin_name;
             $this->version     = $version;
-            $this->css         = PLUGIN_PATH.'admin/css/';
-            $this->js          = PLUGIN_PATH.'admin/js/';
+            $this->css         = PLUGIN_URL.'admin/css/';
+            $this->js          = PLUGIN_URL.'admin/js/';
 
         }
 
@@ -125,7 +125,9 @@
              */
 
             wp_enqueue_script($this->plugin_name, $this->css.'wp_users_handler-admin.js', array('jquery'), $this->version, false);
-
+            wp_localize_script($this->plugin_name, 'pl_globals', array(
+                'ajaxUrl'  => admin_url('admin-ajax.php')
+            ));
         }
 
     }

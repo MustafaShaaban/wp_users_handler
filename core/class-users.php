@@ -39,8 +39,8 @@
 
         public function __construct()
         {
-            self::$instance   = $this;
-            $this->defaults   = [
+            self::$instance = $this;
+            $this->defaults = [
                 'email_confirmation' => 'pending',
                 'account_status'     => 'active'
             ];
@@ -146,7 +146,7 @@
          *
          * @return array of rules if $single : return the first role only
          * @author Mustafa Shaaban
-         * @version 1.0.0 V
+         * @since    1.0.0
          */
         public static function get_user_role($id = 0, $single = true)
         {
