@@ -13,6 +13,12 @@
     class Users_Admin
     {
         public static $instance;
+
+        /**
+         * Initialize the class and set its properties.
+         *
+         * @since    1.0.0
+         */
         public function __construct()
         {
             self::$instance = $this;

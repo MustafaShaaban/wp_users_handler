@@ -37,12 +37,18 @@
         public static $instance;
         private $defaults = [];
 
+        /**
+         * Initialize the class and set its properties.
+         *
+         * @since    1.0.0
+         */
         public function __construct()
         {
             self::$instance = $this;
             $this->defaults = [
-                'email_confirmation' => 'pending',
-                'account_status'     => 'active'
+                PLUGIN_KEY.'_email_confirmation' => 'pending',
+                PLUGIN_KEY.'_account_status'     => 'active',
+                PLUGIN_KEY.'_default_language'   => 'en'
             ];
 
             add_action('wp_ajax_nopriv_'.PLUGIN_KEY.'_login_ajax', array($this, 'login_ajax_callback'));

@@ -23,15 +23,19 @@
         public static $instance;
         private $defaults = [];
 
+        /**
+         * Initialize the class and set its properties.
+         *
+         * @since    1.0.0
+         */
         public function __construct()
         {
             self::$instance = $this;
-            $this->defaults = [
-                '' => ''
-            ];
-
-            add_action('wp_ajax_nopriv_'.PLUGIN_KEY.'_login_ajax', array($this,'login_ajax_callback'));
-
+            add_action('init', array($this, 'profile_post_type'));
+            add_action('wp_ajax_'.PLUGIN_KEY.'_update_profile_ajax', array($this, 'update_profile_ajax_callback'));
+            add_action('wp_ajax_'.PLUGIN_KEY.'_update_avatar_ajax', array($this, 'update_avatar_ajax_callback'));
+            add_action('wp_ajax_'.PLUGIN_KEY.'_profile_search_ajax', array($this, 'profile_search_ajax_callback'));
+            add_action('wp_ajax_nopriv_'.PLUGIN_KEY.'_profile_search_ajax', array($this, 'profile_search_ajax_callback'));
         }
 
         public static function get_instance()
@@ -42,6 +46,60 @@
             return self::$instance;
         }
 
+        public function profile_post_type()
+        {
+
+            $labels = array(
+                "name"          => __("Profiles", 'wp_users_handler'),
+                "singular_name" => __("Profile", 'wp_users_handler'),
+            );
+
+            $args = array(
+                "label"                 => __("Profiles", 'wp_users_handler'),
+                "labels"                => $labels,
+                "description"           => "",
+                "public"                => true,
+                "publicly_queryable"    => true,
+                "show_ui"               => true,
+                "delete_with_user"      => false,
+                "show_in_rest"          => true,
+                "rest_base"             => "",
+                "rest_controller_class" => "WP_REST_Posts_Controller",
+                "has_archive"           => true,
+                "show_in_menu"          => true,
+                "show_in_nav_menus"     => true,
+                "exclude_from_search"   => false,
+                "capability_type"       => "post",
+                "map_meta_cap"          => true,
+                "hierarchical"          => true,
+                "rewrite"               => array("slug" => "profile", "with_front" => true),
+                "query_var"             => true,
+                "supports"              => array("title", "editor", "thumbnail", "excerpt", "trackbacks", "custom-fields", "comments", "revisions", "author", "page-attributes", "post-formats"),
+            );
+
+            register_post_type("profile", $args);
+
+        }
+
+        public function update_profile_ajax_callback()
+        {
+
+        }
+
+        public function update_avatar_ajax_callback()
+        {
+
+        }
+
+        public function profile_search_ajax_callback()
+        {
+
+        }
+
+        public function convert()
+        {
+
+        }
     }
 
     new Profile();
