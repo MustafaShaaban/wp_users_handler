@@ -28,5 +28,15 @@
 	 * Although scripts in the WordPress core, Plugins and Themes may be
 	 * practising this, we should strive to set a better example in our own work.
 	 */
-	console.log(pl_globals);
+
+	const pl_basic = {
+		init: function () {
+
+		}
+	};
+
+	$(document).ready(function (e) {
+		pl_basic.init();
+	});
+
 })( jQuery );

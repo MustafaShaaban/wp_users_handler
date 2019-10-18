@@ -29,4 +29,14 @@
 	 * practising this, we should strive to set a better example in our own work.
 	 */
 
+	const pl_basic = {
+		init: function () {
+
+		}
+	};
+
+	$(document).ready(function (e) {
+		pl_basic.init();
+	});
+
 })( jQuery );
