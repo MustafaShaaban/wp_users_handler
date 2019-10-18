@@ -1,7 +1,7 @@
 <?php
 
     /**
-     * Class Users_Front
+     * Class Profile_Public
      *
      * Profile Form
      * Profile View
@@ -11,11 +11,11 @@
      * Search View
      *
      */
+    namespace UH\FRONT\PROFILE;
 
-    class Profile_Front
+    class Profile_Public
     {
         public static $instance;
-        private $plugin_key;
 
         public function __construct()
         {
@@ -32,3 +32,5 @@
 
 
     }
+    new Profile_Public();
+    

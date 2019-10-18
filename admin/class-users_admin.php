@@ -8,11 +8,11 @@
      *
      */
 
+    namespace UH\ADMIN\USERS;
+
     class Users_Admin
     {
         public static $instance;
-        private $plugin_key;
-
         public function __construct()
         {
             self::$instance = $this;
@@ -25,6 +25,5 @@
             }
             return self::$instance;
         }
-
 
     }

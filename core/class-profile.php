@@ -11,21 +11,26 @@
      *
      */
 
+    namespace UH\PROFILE;
+
+    use UH\CRYPTOR\wp_cryptor;
+    use UH\VALIDATIONS\Wp_validations;
+
     class Profile
     {
+        use Wp_validations;
+
         public static $instance;
-        private $plugin_key;
         private $defaults = [];
 
         public function __construct()
         {
             self::$instance = $this;
-            $this->plugin_key = 'APP';
             $this->defaults = [
                 '' => ''
             ];
 
-            add_action('wp_ajax_nopriv_'.$this->plugin_key.'_login_ajax', array($this,'login_ajax_callback'));
+            add_action('wp_ajax_nopriv_'.PLUGIN_KEY.'_login_ajax', array($this,'login_ajax_callback'));
 
         }
 
@@ -38,3 +43,5 @@
         }
 
     }
+
+    new Profile();
