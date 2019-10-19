@@ -65,6 +65,8 @@
          */
         protected $version;
 
+        public static $instance;
+
         /**
          * Define the core functionality of the plugin.
          *
@@ -83,12 +85,21 @@
             }
             $this->plugin_name = 'wp_users_handler';
 
+            self::$instance = $this;
+
             $this->load_dependencies();
             $this->set_locale();
             $this->define_admin_hooks();
             $this->define_public_hooks();
-
         }
+
+        public static function get_instance() {
+            if (self::$instance === null) {
+                self::$instance = new self();
+            }
+            return self::$instance;
+        }
+
 
         /**
          * Load the required dependencies for this plugin.

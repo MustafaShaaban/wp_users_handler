@@ -22,6 +22,15 @@
         public function __construct()
         {
             self::$instance = $this;
+
+            $configurations = new \stdClass();
+            $configurations->email_confirmation = 'on';
+            $configurations->limit_active_login = 'on';
+            $configurations->login_network = 'on';
+            $configurations->admin_approval = 'on';
+
+            add_option(PLUGIN_KEY.'_configurations', $configurations);
+            add_option(PLUGIN_KEY.'_number_of_active_login', 1);
         }
 
         public static function get_instance()
@@ -33,3 +42,5 @@
         }
 
     }
+
+    new Users_Admin();

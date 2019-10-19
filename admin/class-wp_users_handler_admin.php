@@ -78,6 +78,7 @@
             $this->css         = PLUGIN_URL.'admin/css/';
             $this->js          = PLUGIN_URL.'admin/js/';
 
+            require_once PLUGIN_PATH.'admin/class-users_admin.php';
         }
 
         /**
