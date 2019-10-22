@@ -16,7 +16,7 @@
     use UH\CRYPTOR\wp_cryptor;
     use UH\VALIDATIONS\Wp_validations;
 
-    class Profile
+    class Wp_profile
     {
         use Wp_validations;
 
@@ -102,4 +102,4 @@
         }
     }
 
-    new Profile();
+    new Wp_profile();

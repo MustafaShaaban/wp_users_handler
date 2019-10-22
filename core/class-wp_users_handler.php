@@ -93,13 +93,13 @@
             $this->define_public_hooks();
         }
 
-        public static function get_instance() {
+        public static function get_instance()
+        {
             if (self::$instance === null) {
                 self::$instance = new self();
             }
             return self::$instance;
         }
-
 
         /**
          * Load the required dependencies for this plugin.
@@ -133,6 +133,11 @@
             require_once PLUGIN_PATH.'core/class-wp_users_handler_i18n.php';
 
             /**
+             * The class responsible for global functions
+             */
+            require_once PLUGIN_PATH.'helpers/class-wp_functions.php';
+
+            /**
              * The class responsible for crypt and decrypt
              * strings, urls and password.
              */
@@ -145,14 +150,19 @@
             require_once PLUGIN_PATH.'helpers/class-wp_validations.php';
 
             /**
+             * The class responsible for manage the plugin forms.
+             */
+            require_once PLUGIN_PATH.'core/class-forms_controller.php';
+
+            /**
              * The class responsible for all core users operations.
              */
-            require_once PLUGIN_PATH.'core/class-users.php';
+            require_once PLUGIN_PATH.'core/class-wp_users.php';
 
             /**
              * The class responsible for all core profile operations.
              */
-            require_once PLUGIN_PATH.'core/class-profile.php';
+            require_once PLUGIN_PATH.'core/class-wp_profile.php';
 
             /**
              * The class responsible for defining all actions that occur in the admin area.
@@ -164,7 +174,6 @@
              * side of the site.
              */
             require_once PLUGIN_PATH.'public/class-wp_users_handler_public.php';
-
 
 
             $this->loader = new Wp_users_handler_Loader();

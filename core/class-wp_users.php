@@ -1,6 +1,8 @@
 <?php
 
 
+    // TODO:: Revamp login ajax function
+
     /**
      * Class Users
      *
@@ -30,10 +32,11 @@
      */
 
     namespace UH\USERS;
+
     use UH\CRYPTOR\Wp_cryptor;
     use UH\VALIDATIONS\Wp_validations;
 
-    class Users
+    class Wp_users
     {
         use Wp_validations;
 
@@ -77,10 +80,16 @@
             return self::$instance;
         }
 
+
+        /* -------------- Start Of Ajax Functions  -------------- */
+
         public function login_ajax_callback()
         {
-            $form_data   = $_POST['data'];
-            $validations = $this->validate_controller('login', $form_data);
+            $error         = new \WP_Error();
+            $form_data     = $_POST['data'];
+            $validations   = $this->validate_controller('login', $form_data);
+            $user_login    = $this->filterStrings($form_data['user_login']);
+            $user_password = $this->filterStrings($form_data['user_password']);
 
             if (is_user_logged_in()) {
                 wp_send_json(array(
@@ -97,52 +106,6 @@
             }
 
 
-            do_action(PLUGIN_KEY.'_before_login');
-            $this->login($form_data);
-            do_action(PLUGIN_KEY.'_after_login');
-
-        }
-
-        public function register_ajax_callback()
-        {
-            do_action(PLUGIN_KEY.'_before_register');
-            $this->register();
-            do_action(PLUGIN_KEY.'_after_register');
-        }
-
-        public function rp_send_email_ajax_callback()
-        {
-        }
-
-        public function rp_change_password_ajax_callback()
-        {
-        }
-
-        public function activate_account_ajax_callback()
-        {
-        }
-
-        public function resend_activation_mail_ajax_callback()
-        {
-        }
-
-        public function delete_account_ajax_callback()
-        {
-        }
-
-        public function update_account_ajax_callback()
-        {
-            do_action(PLUGIN_KEY.'_before_update_profile');
-            $this->update();
-            do_action(PLUGIN_KEY.'_after_update_profile');
-        }
-
-        private function login($form_data)
-        {
-            $error         = new \WP_Error();
-            $user_login    = $this->filterStrings($form_data['user_login']);
-            $user_password = $this->filterStrings($form_data['user_password']);
-
             $user = get_user_by('login', $user_login);
             if (empty($user)) {
                 $user = get_user_by('email', $user_login);
@@ -154,6 +117,7 @@
                     ));
                 }
             }
+
 
             if (!empty($user)) {
 
@@ -220,31 +184,90 @@
 
                 }
 
-                $cred                  = array();
-                $cred['user_login']    = $user_login;
-                $cred['user_password'] = $user_password;
-                if (isset($form_data['rememberme']) && !empty($this->filterStrings($form_data['rememberme']))) {
-                    $cred['remember'] = $this->filterStrings($form_data['rememberme']);
-                }
+                do_action(PLUGIN_KEY.'_before_login');
 
-                $login = wp_signon($cred);
+                $login = $this->login($form_data);
 
-                if (is_wp_error($login)) {
+                if ($login['success']) {
+                    do_action(PLUGIN_KEY.'_after_login');
                     wp_send_json(array(
-                        'success' => false,
-                        'msg'     => $login->get_error_message(),
+                        'success'      => true,
+                        'msg'          => __('You have logged in successfully!. Redirecting...', 'wp_users_handler'),
+                        'redirect_url' => $form_data['_wp_http_referer'],
                     ));
+                } else {
+                    wp_send_json($login);
                 }
-
-                wp_send_json(array(
-                    'success'      => true,
-                    'msg'          => __('You have logged in successfully!. Redirecting...', 'wp_users_handler'),
-                    'redirect_url' => $form_data['_wp_http_referer'],
-                ));
 
             }
 
-            return false;
+            wp_send_json(array(
+                'success' => false,
+                'msg'     => __('Something went wrong!, Come back later.', 'wp_users_handler'),
+            ));
+
+        }
+
+        public function register_ajax_callback()
+        {
+            do_action(PLUGIN_KEY.'_before_register');
+            $this->register();
+            do_action(PLUGIN_KEY.'_after_register');
+        }
+
+        public function rp_send_email_ajax_callback()
+        {
+        }
+
+        public function rp_change_password_ajax_callback()
+        {
+        }
+
+        public function activate_account_ajax_callback()
+        {
+        }
+
+        public function resend_activation_mail_ajax_callback()
+        {
+        }
+
+        public function delete_account_ajax_callback()
+        {
+        }
+
+        public function update_account_ajax_callback()
+        {
+            do_action(PLUGIN_KEY.'_before_update_profile');
+            $this->update();
+            do_action(PLUGIN_KEY.'_after_update_profile');
+        }
+
+
+        /* -------------- Start Of Ajax dependencies Functions  -------------- */
+
+        private function login($form_data)
+        {
+            $user_login    = $this->filterStrings($form_data['user_login']);
+            $user_password = $this->filterStrings($form_data['user_password']);
+
+            $cred                  = array();
+            $cred['user_login']    = $user_login;
+            $cred['user_password'] = $user_password;
+            if (isset($form_data['rememberme']) && !empty($this->filterStrings($form_data['rememberme']))) {
+                $cred['remember'] = $this->filterStrings($form_data['rememberme']);
+            }
+
+            $login = wp_signon($cred);
+
+            if (is_wp_error($login)) {
+                $return = array(
+                    'success' => false,
+                    'msg'     => $login->get_error_message(),
+                );
+                return $return;
+            }
+
+            return array('success' => true);
         }
 
         private function register()
@@ -309,6 +332,9 @@
             return false;
         }
 
+
+        /* -------------- Start Of Class Public Functions  -------------- */
+
         public function get_account_data()
         {
             global $user_ID;
@@ -362,4 +388,5 @@
         }
 
     }
-    new Users();
+
+    new Wp_users();

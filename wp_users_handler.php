@@ -37,10 +37,19 @@
     }
 
     /**
-     * Defining the Wp_users_handler plugin path
+     * Defining the plugin name.
+     */
+    define('PLUGIN_NAME', 'WP Users Handler');
+
+    /**
+     * Define the plugins' main directory path
      */
     define('PLUGIN_PATH', plugin_dir_path(__FILE__));
-    define('PLUGIN_URL', plugin_dir_url( __FILE__ ));
+
+    /**
+     * Define the plugins' main URL path
+     */
+    define('PLUGIN_URL', plugin_dir_url(__FILE__));
 
     /**
      * Defining the plugin convention key
@@ -56,7 +65,6 @@
 
     class Wp_users_handler_basic
     {
-
         /**
          * Define the basic functionality of the plugin.
          *
@@ -128,7 +136,6 @@
             $plugin = new Wp_users_handler();
             $plugin->run();
         }
-
     }
 
     new Wp_users_handler_basic();

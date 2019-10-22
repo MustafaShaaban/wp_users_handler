@@ -10,6 +10,8 @@
 
     namespace UH\ADMIN\USERS;
 
+    use UH\HANDLER\Wp_users_handler;
+
     class Users_Admin
     {
         public static $instance;
@@ -22,15 +24,9 @@
         public function __construct()
         {
             self::$instance = $this;
+            $loader = Wp_users_handler::get_instance()->get_loader();
 
-            $configurations = new \stdClass();
-            $configurations->email_confirmation = 'on';
-            $configurations->limit_active_login = 'on';
-            $configurations->login_network = 'on';
-            $configurations->admin_approval = 'on';
-
-            add_option(PLUGIN_KEY.'_configurations', $configurations);
-            add_option(PLUGIN_KEY.'_number_of_active_login', 1);
+            $loader->add_action('wp_ajax_'.PLUGIN_KEY.'_switch_settings', $this, 'switch_settings_ajax_callback');
         }
 
         public static function get_instance()
@@ -39,6 +35,20 @@
                 self::$instance = new self();
             }
             return self::$instance;
+        }
+
+        public function switch_settings_ajax_callback() {
+            $option_name = $_POST['option_name'];
+            $option_value = $_POST['option_value'];
+            $options = get_option(PLUGIN_KEY.'_configurations', true);
+            $options->{$option_name} = $option_value;
+
+            update_option(PLUGIN_KEY.'_configurations', $options);
+
+            wp_send_json(array(
+                'success' => true,
+                'msg' => __("Settings has benn updated successfully", "wp_users_handler")
+            ));
         }
 
     }

@@ -23,8 +23,11 @@
 
     namespace UH\ADMIN\MAIN;
 
+    use UH\FUNCTIONS\Wp_functions;
+
     class Wp_users_handler_Admin
     {
+        use Wp_functions;
 
         /**
          * The ID of this plugin.
@@ -63,6 +66,15 @@
         private $js;
 
         /**
+         * The public Img Folder Path.
+         *
+         * @since    1.0.0
+         * @access   private
+         * @var      string $img The Img folder path.
+         */
+        private $img;
+
+        /**
          * Initialize the class and set its properties.
          *
          * @since    1.0.0
@@ -77,8 +89,10 @@
             $this->version     = $version;
             $this->css         = PLUGIN_URL.'admin/css/';
             $this->js          = PLUGIN_URL.'admin/js/';
+            $this->img         = PLUGIN_URL.'admin/img/';
 
             require_once PLUGIN_PATH.'admin/class-users_admin.php';
+
         }
 
         /**
@@ -100,8 +114,11 @@
              * between the defined hooks and the functions defined in this
              * class.
              */
-
-            wp_enqueue_style($this->plugin_name, $this->css.'wp_users_handler-admin.css', array(), $this->version, 'all');
+            if (isset($_GET['page']) && $_GET['page'] === PLUGIN_KEY.'-main-page') {
+                wp_enqueue_style($this->plugin_name.'-bootstrap', $this->css.'bootstrap.min.css', array(), $this->version, 'all');
+                wp_enqueue_style($this->plugin_name.'-loading', $this->css.'pl-loading.css', array(), $this->version, 'all');
+                wp_enqueue_style($this->plugin_name, $this->css.'wp_users_handler-admin.css', array(), $this->version, 'all');
+            }
 
         }
 
@@ -125,9 +142,13 @@
              * class.
              */
 
-            wp_enqueue_script($this->plugin_name, $this->css.'wp_users_handler-admin.js', array('jquery'), $this->version, false);
+            if (isset($_GET['page']) && $_GET['page'] === PLUGIN_KEY.'-main-page') {
+                wp_enqueue_script($this->plugin_name.'-bootstrap', $this->js.'bootstrap.min.js', array('jquery'), $this->version, false);
+            }
+            wp_enqueue_script($this->plugin_name, $this->js.'wp_users_handler-admin.js', array('jquery'), $this->version, false);
             wp_localize_script($this->plugin_name, 'pl_globals', array(
-                'ajaxUrl'  => admin_url('admin-ajax.php')
+                'ajaxUrl'    => admin_url('admin-ajax.php'),
+                'plugin_key' => PLUGIN_KEY
             ));
         }
 
