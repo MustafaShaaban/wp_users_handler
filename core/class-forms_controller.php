@@ -38,6 +38,10 @@
         }
 
         /**
+         * The Form Controller
+         * This function responsible fore controlling the form settings and create all form fields
+         * by take them as an array and return the html form.
+         *
          * @param array $form_fields
          *
          * @return bool|string
@@ -698,6 +702,12 @@
             return wp_nonce_field($value, $name);
         }
 
+        /**
+         * This functions responsible for sort inputs
+         * @param $settings
+         *
+         * @return mixed
+         */
         private function sort_settings($settings)
         {
             foreach ($settings as $key => $value) {
