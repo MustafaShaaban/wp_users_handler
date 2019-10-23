@@ -85,7 +85,8 @@
         /**
          * This function responsible for include required public facing classes
          */
-        public function require_files() {
+        public function require_files()
+        {
             require_once PLUGIN_PATH.'public/class-profile_public.php';
             require_once PLUGIN_PATH.'public/class-users_public.php';
         }
@@ -135,13 +136,16 @@
              * class.
              */
 
-            wp_enqueue_script($this->plugin_name.'-bootstrap', $this->js.'bootstrap.min.js', array('jquery'), $this->version, false);
-            wp_enqueue_script($this->plugin_name, $this->js.'wp_users_handler-public.js', array('jquery'), $this->version, false);
+            wp_enqueue_script($this->plugin_name.'-validation', $this->js.'jquery.validate.min.js', array('jquery'), $this->version, true);
+            wp_enqueue_script($this->plugin_name.'-validation-methods', $this->js.'additional-methods.min.js', array('jquery', 'validation'), $this->version, true);
+            wp_enqueue_script($this->plugin_name.'-functions', $this->js.'pl-functions.js', array('jquery'), $this->version, true);
+            wp_enqueue_script($this->plugin_name.'-bootstrap', $this->js.'bootstrap.min.js', array('jquery'), $this->version, true);
+            wp_enqueue_script($this->plugin_name, $this->js.'wp_users_handler-public.js', array('jquery'), $this->version, true);
             wp_localize_script($this->plugin_name, 'pl_globals', array(
+                'pl_key'  => PLUGIN_KEY,
                 'ajaxUrl' => admin_url('admin-ajax.php')
             ));
             wp_localize_script($this->plugin_name, 'pl_phrases', array(
-                'pl_key'      => PLUGIN_KEY,
                 'default'     => __("This field is required.", "wp_users_handler"),
                 'email'       => __("Please enter a valid email address.", "wp_users_handler"),
                 'number'      => __("Please enter a valid number.", "wp_users_handler"),

@@ -61,10 +61,4 @@
             </div>
         </div>
     </div>
-
-
-    <div class="form-group col-sm-3">
-    </div>
-
 <?php
-    echo do_shortcode('[UH_login_form]');

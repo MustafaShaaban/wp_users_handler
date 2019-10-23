@@ -47,6 +47,18 @@ e.g.
 1. Activate the plugin through the 'Plugins' menu in WordPress
 1. Place `<?php do_action('plugin_name_hook'); ?>` in your templates
 
+## == Available Hooks ==
+> Login Form:
+
+<ul>
+<li>UH_before_login_form_start</li>
+<li>UH_before_login_form_fields</li>
+<li>UH_after_login_form_fields</li>
+<li>UH_before_login_form_end</li>
+<li>UH_after_login_form_end</li>
+</ul>
+
+
 ## == Frequently Asked Questions ==
 
 = A question that someone might have =

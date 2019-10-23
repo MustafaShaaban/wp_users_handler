@@ -35,124 +35,46 @@
             return self::$instance;
         }
 
-
-
-
         /**
-         * TODO:: Create The form controller and create the before and after do_actions, and create the fields data
+         * @param array $form_fields
+         *
+         * @return bool|string
          */
-        public function lg_build_form_fields($att)
+        public function create_form($form_fields = [])
         {
-            global $user_ID;
-            $att = shortcode_atts(
-                array(
-                    'form_fields' => '',
-                    'values'      => []
-                ), $att, 'lg_form_fields');
-
-            if (empty($att['form_fields'])) {
-                return '';
+            if (empty($form_fields)) {
+                return false;
             }
 
-            if (@unserialize($att['form_fields']) !== false) {
-                $form_fields = unserialize($att['form_fields']);
-            } else {
-                $form_fields = $att['form_fields'];
-            }
-
-            if (@unserialize($att['values']) !== false) {
-                $form_values = unserialize($att['values']);
-            } else {
-                $form_values = $att['values'];
-            }
+            $settings = $this->sort_settings($form_fields);
 
             ob_start();
             $form = "";
-            if (!empty($form_fields)) {
-                foreach ($form_fields as $field) {
-                    if ($field['type'] === 'select') {
-                        $args = [
-                            'label'          => __($field['label'], 'LG'),
-                            'name'           => $field['name'],
-                            'required'       => ($field['required'] === 1) ? 'required' : '',
-                            'placeholder'    => __($field['label'], 'LG'),
-                            'id'             => "LG_".$field['name'],
-                            'options'        => $field['choices'],
-                            'default_option' => $field['default_value'][0]
-                        ];
-                        $form .= $this->lg_build_selectbox($args);
-                    } elseif ($field['type'] === 'text' || $field['type'] === 'email' || $field['type'] === 'file' || $field['type'] === 'number') {
-                        switch ($field['name']) {
-                            case 'email_address':
-                                $value = get_user_meta($user_ID, 'billing_email', true);
-                                break;
-                            case 'phone_number':
-                                $value = get_user_meta($user_ID, 'billing_phone', true);
-                                break;
-                            case 'company_name':
-                                $value = get_user_meta($user_ID, 'billing_company', true);
-                                break;
-                            default:
-                                $value = (array_key_exists($field['name'], $form_values)) ? $form_values[$field['name']] : '';
-                                break;
-                        }
-                        $args = [
-                            'type'          => $field['type'],
-                            'label'         => __($field['label'], 'LG'),
-                            'name'          => $field['name'],
-                            'value'         => $value,
-                            'default_value' => $field['default_value'],
-                            'required'      => ($field['required'] === 1) ? 'required' : '',
-                            'placeholder'   => __($field['label'], 'LG'),
-                            'id'            => "LG_".$field['name']
-                        ];
-                        $form .= $this->lg_build_input_default($args);
-                    } elseif ($field['type'] === 'textarea') {
-                        $args = [
-                            'label'       => __($field['label'], 'LG'),
-                            'name'        => $field['name'],
-                            'value'       => (array_key_exists($field['name'], $form_values)) ? $form_values[$field['name']] : '',
-                            'required'    => ($field['required'] === 1) ? 'required' : '',
-                            'placeholder' => __($field['label'], 'LG'),
-                            'id'          => "LG_".$field['name'],
-                        ];
-                        $form .= $this->lg_build_textarea($args);
-                    } elseif ($field['type'] === 'checkbox') {
-                        $args = [
-                            'type'     => $field['type'],
-                            'label'    => __($field['label'], 'LG'),
-                            'name'     => $field['name'],
-                            'value'    => $field['default_value'],
-                            'choices'  => $field['choices'],
-                            'required' => ($field['required'] === 1) ? 'required' : '',
-                            'id'       => "LG_".$field['name']
-                        ];
-                        $form .= $this->lg_build_checkbox($args);
-                    } else {
-                        $args = [
-                            'type'        => $field['type'],
-                            'label'       => __($field['label'], 'LG'),
-                            'name'        => $field['name'],
-                            'required'    => ($field['required'] === 1) ? 'required' : '',
-                            'placeholder' => __($field['label'], 'LG'),
-                            'id'          => "LG_".$field['name']
-                        ];
-                        $form .= $this->lg_build_input_default($args);
-                    }
-
+            foreach ($settings as $key => $field) {
+                if ($field['type'] === 'text' || $field['type'] === 'email' || $field['type'] === 'password' || $field['type'] === 'number') {
+                    $form .= $this->std_inputs($field);
+                } elseif ($field['type'] === 'file') {
+                    $form .= $this->file_inputs($field);
+                } elseif ($field['type'] === 'checkbox') {
+                    $form .= $this->checkbox_inputs($field);
+                } elseif ($field['type'] === 'radio') {
+                    $form .= $this->radio_inputs($field);
+                } elseif ($field['type'] === 'switch') {
+                    $form .= $this->switch_inputs($field);
+                } elseif ($field['type'] === 'textarea') {
+                    $form .= $this->textarea_inputs($field);
+                } elseif ($field['type'] === 'select') {
+                    $form .= $this->selectBox_inputs($field);
                 }
             }
             $form .= ob_get_clean();
-
-            return $form;
+            echo $form;
         }
-
-
 
         /**
          * This function responsible for create the start of tag form
          *
-         * @param $args [
+         * @param array $args [
          * class    => ''
          * id       => ''
          * ]
@@ -160,7 +82,7 @@
          * @return false|string
          *
          */
-        public function form_start($args)
+        public function form_start($args = [])
         {
             $defaults = [
                 'class' => '',
@@ -173,13 +95,13 @@
             ?>
             <form action="" class="<?= PLUGIN_KEY ?>_form <?= $input_data['class'] ?>" id="<?= $input_data['id'] ?>">
             <?php
-            return ob_get_clean();
+            echo ob_get_clean();
         }
 
         /**
          * This function responsible for create the form submit button
          *
-         * @param $args [
+         * @param array $args [
          * value    => ''
          * class    => ''
          * id       => ''
@@ -189,10 +111,10 @@
          *
          * @return false|string
          */
-        public function form_submit_button($args)
+        public function form_submit_button($args = [])
         {
             $defaults = [
-                'value'  => '',
+                'value'  => 'Submit',
                 'class'  => '',
                 'id'     => '',
                 'before' => '',
@@ -203,11 +125,13 @@
 
             ob_start();
             ?>
-            <?= $input_data['before'] ?>
-            <button class="btn btn-primary pl-btn <?= $input_data['class'] ?>" id="<?= $input_data['id'] ?>" type="submit"><?= $input_data['value'] ?></button>
-            <?= $input_data['after'] ?>
+            <div class="form-group">
+                <?= $input_data['before'] ?>
+                <button class="btn btn-primary pl-btn <?= $input_data['class'] ?>" id="<?= $input_data['id'] ?>" type="submit"><?= $input_data['value'] ?></button>
+                <?= $input_data['after'] ?>
+            </div>
             <?php
-            return ob_get_clean();
+            echo ob_get_clean();
         }
 
         /**
@@ -221,15 +145,14 @@
             ?>
             </form>
             <?php
-            return ob_get_clean();
+            echo ob_get_clean();
         }
-
 
         /**
          * This function responsible for create stander input field
          *
          * @param array $args [
-         * type          => (text / email / number)
+         * type          => (text / email / password / number)
          * label         => ''
          * name          => ''
          * required      => ''
@@ -286,12 +209,12 @@
             $value   = (empty($input_data['default_value']) && $input_data['default_value'] !== 0) ? $input_data['value'] : $input_data['default_value'];;
 
             ?>
-            <div class="form-group <?= $input_data['class'] ?>">
+            <div class="form-group pl-input-wrapper <?= $input_data['class'] ?>">
                 <?= $input_data['before'] ?>
                 <label for="<?= $input_data['id'] ?>"><?= $input_data['label'] ?></label>
                 <?= $require ?>
                 <input type="<?= $input_data['type'] ?>"
-                       class="form-control"
+                       class="form-control pl-form-input"
                        id="<?= $input_data['id'] ?>"
                        name="<?= $input_data['name'] ?>"
                        value="<?= $value ?>"
@@ -336,7 +259,7 @@
          * @return false|string
          *
          */
-        public function create_textarea($args = [])
+        public function textarea_inputs($args = [])
         {
             ob_start();
             $defaults   = [
@@ -357,11 +280,11 @@
             $input_data = array_merge($defaults, $args);
             $require    = (!empty($input_data['required'])) ? '<abbr class="required" title="required">*</abbr>' : '';
             ?>
-            <div class="form-group <?= $input_data['class'] ?>">
+            <div class="form-group pl-input-wrapper<?= $input_data['class'] ?>">
                 <?= $input_data['before'] ?>
                 <label for="<?= $input_data['id'] ?>"><?= $input_data['label'] ?></label>
                 <?= $require ?>
-                <textarea class="form-control"
+                <textarea class="form-control pl-form-input"
                           id="<?= $input_data['id'] ?>"
                           name="<?= $input_data['name'] ?>"
                           placeholder="<?= $input_data['placeholder'] ?>"
@@ -421,13 +344,13 @@
             $require    = (!empty($input_data['required'])) ? '<abbr class="required" title="required">*</abbr>' : '';
 
             ?>
-            <div class="form-group <?= $input_data['class'] ?>">
+            <div class="form-group pl-input-wrapper<?= $input_data['class'] ?>">
                 <p><?= $input_data['label'] ?></p>
                 <?= $require ?>
                 <div class="custom-file">
                     <?= $input_data['before'] ?>
                     <input type="file"
-                           class="custom-file-input"
+                           class="custom-file-input pl-form-input"
                            id="<?= $input_data['id'] ?>"
                            name="<?= $input_data['name'] ?>"
                            aria-describedby="<?= $input_data['id']."_help" ?>"
@@ -450,7 +373,6 @@
             return ob_get_clean();
         }
 
-
         /**
          * This function responsible for create selectBox input field
          *
@@ -472,7 +394,7 @@
          * @return false|string
          *
          */
-        public function create_selectBox($args = [])
+        public function selectBox_inputs($args = [])
         {
             ob_start();
             $defaults   = [
@@ -494,11 +416,11 @@
             $require    = (!empty($input_data['required'])) ? '<abbr class="required" title="required">*</abbr>' : '';
 
             ?>
-            <div class="form-group <?= $input_data['class'] ?>">
+            <div class="form-group pl-input-wrapper <?= $input_data['class'] ?>">
                 <?= $input_data['before'] ?>
                 <label for="<?= $input_data['id'] ?>"><?= $input_data['label'] ?></label>
                 <?= $require ?>
-                <select class="form-control" id="<?= $input_data['id'] ?>" name="<?= $input_data['name'] ?>" <?= $this->create_attr($input_data) ?> <?= $input_data['required'] ?>>
+                <select class="form-control pl-form-input" id="<?= $input_data['id'] ?>" name="<?= $input_data['name'] ?>" <?= $this->create_attr($input_data) ?> <?= $input_data['required'] ?>>
                     <?php
                         if (empty($input_data['default_option']) && empty($input_data['select_option'])) {
                             ?>
@@ -517,39 +439,70 @@
         }
 
         /**
-         * TODO:: enhancement the function, and create the switches and radio buttons inputs
-        */
+         * This function responsible for create checkbox input field
+         *
+         * @param array $args [
+         * type'    => 'checkbox',
+         * choices' => array(
+         *  array(
+         *      label'      => ''
+         *      name'       => ''
+         *      required'   => ''
+         *      class'      => ''
+         *      id'         => default is PLUGIN_KEY_name
+         *      value'      => ''
+         *      before'     => ''
+         *      after'      => ''
+         *      checked'    => ''
+         *      extra_attr' => []
+         *  )
+         * )
+         * ]
+         *
+         * @return false|string
+         */
         public function checkbox_inputs($args = [])
         {
             ob_start();
             $defaults   = [
-                'type'       => 'checkbox',
-                'label'      => '',
-                'name'       => '',
-                'required'   => '',
-                'class'      => '',
-                'id'         => (empty($args['name'])) ? "" : PLUGIN_KEY.'_'.$args['name'],
-                'value'      => '',
-                'choices'    => [],
-                'before'     => '',
-                'after'      => '',
-                'extra_attr' => []
+                'type'    => 'checkbox',
+                'choices' => [
+                    [
+                        'label'      => '',
+                        'name'       => '',
+                        'required'   => '',
+                        'class'      => '',
+                        'id'         => '',
+                        'value'      => '',
+                        'before'     => '',
+                        'after'      => '',
+                        'checked'    => '',
+                        'extra_attr' => []
+                    ]
+                ]
             ];
             $input_data = array_merge($defaults, $args);
             $require    = (!empty($input_data['required'])) ? '<abbr class="required" title="required">*</abbr>' : '';
 
-            foreach ($input_data['choices'] as $name => $value) {
+            $count = 0;
+            foreach ($input_data['choices'] as $name) {
+                if (empty($name['id'])) {
+                    $id = (empty($name['name'])) ? "" : PLUGIN_KEY.'_'.str_replace('[]', '', $name['name']).$count;
+                    $count++;
+                } else {
+                    $id = $name['id'];
+                }
                 ?>
-                <div class="form-check <?= $input_data['class'] ?>">
-                    <?= $input_data['before'] ?>
+                <div class="form-check pl-input-wrapper<?= $name['class'] ?>">
+                    <?= $name['before'] ?>
                     <?= $require ?>
                     <input type="<?= $input_data['type'] ?>"
-                           class="form-control"
-                           id="<?= $input_data['id'] ?>"
-                           name="<?= $name ?>"
-                           value="<?= $name ?>" <?= $input_data['required'] ?> <?= $this->create_attr($input_data) ?> <?= ($input_data['value'][0] === $name) ? 'checked' : '' ?>>
-                    <label for="<?= $input_data['id'] ?>"><?= $value ?></label>
-                    <?= $input_data['after'] ?>
+                           class="form-control pl-form-input"
+                           id="<?= $id ?>"
+                           name="<?= $name['name'] ?>"
+                           value="<?= $name['value'] ?>" <?= $name['required'] ?> <?= $this->create_attr($name['choices']) ?> <?= $name['checked'] ?>>
+                    <label for="<?= $id ?>"><?= $name['label'] ?></label>
+                    <?= $name['after'] ?>
                 </div>
                 <?php
             }
@@ -557,6 +510,130 @@
             return ob_get_clean();
         }
 
+        /**
+         * This function responsible for create radio input field
+         *
+         * @param array $args [
+         * type'    => 'checkbox',
+         * name'    => ''
+         * choices' => array(
+         *  array(
+         *      label'      => ''
+         *      required'   => ''
+         *      class'      => ''
+         *      id'         => default is PLUGIN_KEY_name
+         *      value'      => ''
+         *      before'     => ''
+         *      after'      => ''
+         *      checked'    => ''
+         *      extra_attr' => []
+         *  )
+         * )
+         * ]
+         *
+         * @return false|string
+         */
+        public function radio_inputs($args = [])
+        {
+            ob_start();
+            $defaults   = [
+                'type'    => 'radio',
+                'name'    => '',
+                'choices' => [
+                    [
+                        'label'      => '',
+                        'required'   => '',
+                        'class'      => '',
+                        'id'         => (empty($args['choices']['name'])) ? "" : PLUGIN_KEY.'_'.$args['choices']['name'],
+                        'value'      => '',
+                        'before'     => '',
+                        'after'      => '',
+                        'checked'    => '',
+                        'extra_attr' => []
+                    ]
+                ]
+            ];
+            $input_data = array_merge($defaults, $args);
+            $require    = (!empty($input_data['required'])) ? '<abbr class="required" title="required">*</abbr>' : '';
+
+            $count = 0;
+            foreach ($input_data['choices'] as $name) {
+                if (empty($name['id'])) {
+                    $id = (empty($name['name'])) ? "" : PLUGIN_KEY.'_'.str_replace('[]', '', $name['name']).$count;
+                    $count++;
+                } else {
+                    $id = $name['id'];
+                }
+                ?>
+                <div class="form-check pl-input-wrapper <?= $name['class'] ?>">
+                    <?= $name['before'] ?>
+                    <?= $require ?>
+                    <input type="<?= $input_data['type'] ?>"
+                           class="form-control pl-form-input"
+                           id="<?= $id ?>"
+                           name="<?= $input_data['name'] ?>"
+                           value="<?= $name['value'] ?>" <?= $name['required'] ?> <?= $this->create_attr($name['choices']) ?> <?= $name['checked'] ?>>
+                    <label for="<?= $id ?>"><?= $name['label'] ?></label>
+                    <?= $name['after'] ?>
+                </div>
+                <?php
+            }
+
+            return ob_get_clean();
+        }
+
+        /**
+         * This function responsible for create radio input field
+         *
+         * @param array $args [
+         * type'       => 'switch',
+         * label'      => ''
+         * name'       => ''
+         * required'   => ''
+         * class'      => ''
+         * id'         => default is PLUGIN_KEY_name
+         * before'     => ''
+         * after'      => ''
+         * checked'    => ''
+         * extra_attr' => []
+         * ]
+         *
+         * @return false|string
+         */
+        public function switch_inputs($args = [])
+        {
+            ob_start();
+            $defaults   = [
+                'type'       => 'switch',
+                'label'      => '',
+                'name'       => '',
+                'required'   => '',
+                'class'      => '',
+                'id'         => (empty($args['name'])) ? "" : PLUGIN_KEY.'_'.$args['name'],
+                'before'     => '',
+                'after'      => '',
+                'checked'    => '',
+                'extra_attr' => []
+            ];
+            $input_data = array_merge($defaults, $args);
+            $require    = (!empty($input_data['required'])) ? '<abbr class="required" title="required">*</abbr>' : '';
+
+            ?>
+
+            <div class="custom-control custom-switch pl-input-wrapper <?= $input_data['class'] ?>">
+                <?= $input_data['before'] ?>
+                <?= $require ?>
+                <input type="checkbox"
+                       class="custom-control-input pl-form-input pl-switch <?= PLUGIN_KEY.'-'.$input_data['class'] ?>"
+                       id="<?= $input_data['id'] ?>"
+                       name="<?= $input_data['name'] ?>"
+                    <?= $input_data['required'] ?> <?= $this->create_attr($input_data) ?> <?= $input_data['checked'] ?>>
+                <label class="custom-control-label" for="<?= $input_data['id'] ?>"><?= $input_data['label'] ?></label>
+                <?= $input_data['after'] ?>
+            </div>
+            <?php
+            return ob_get_clean();
+        }
 
         /**
          * This function responsible for create extra html attributes.
@@ -570,12 +647,16 @@
             $attrs = '';
             if (is_array($args['extra_attr']) && !empty($args['extra_attr'])) {
                 foreach ($args['extra_attr'] as $name => $value) {
-                    if ($args['type'] === 'number' && $name === 'maxlength' || $name === 'minlength') {
-                        continue;
+
+                    if (isset($args['type'])) {
+                        if ($args['type'] === 'number' && $name === 'maxlength' || $name === 'minlength') {
+                            continue;
+                        }
+                        if ($args['type'] !== 'number' && $name === 'max' || $name === 'min') {
+                            continue;
+                        }
                     }
-                    if ($args['type'] !== 'number' && $name === 'max' || $name === 'min') {
-                        continue;
-                    }
+
                     $attrs .= " $name='$value' ";
                 }
             }
@@ -584,6 +665,7 @@
 
         /**
          * This function responsible for creating the input fielda
+         *
          * @param array $args
          */
         public function create_hidden_inputs($args = [])
@@ -612,5 +694,23 @@
         public function create_none($name, $value)
         {
             return wp_nonce_field($value, $name);
+        }
+
+        private function sort_settings($settings)
+        {
+            foreach ($settings as $key => $value) {
+                if ($value['type'] === 'checkbox' && isset($value['choices']) && !empty($value['choices'])) {
+                    $choices = $value['choices'];
+                    usort($choices, function ($a, $b) {
+                        return $a['order'] > $b['order'];
+                    });
+                    $settings[$key]['choices'] = $choices;
+                }
+            }
+            usort($settings, function ($a, $b) {
+                return $a['order'] > $b['order'];
+            });
+
+            return $settings;
         }
     }
