@@ -34,12 +34,14 @@
     namespace UH\USERS;
 
     use UH\CRYPTOR\Wp_cryptor;
+    use UH\FUNCTIONS\Wp_functions;
     use UH\VALIDATIONS\Wp_validations;
 
     class Wp_users
     {
         use Wp_validations;
-
+        use Wp_functions;
+        
         public static $instance;
         private $defaults = [];
         private $configurations;
@@ -53,7 +55,7 @@
         public function __construct()
         {
             self::$instance       = $this;
-            $this->configurations = get_option(PLUGIN_KEY.'_configurations', true);
+            $this->configurations = get_option($this->plugin_key().'_configurations', true);
             $this->defaults       = [
                 'email_confirmation' => 'pending',
                 'block_status'       => '',
@@ -62,14 +64,14 @@
                 'default_language'   => 'en'
             ];
 
-            add_action('wp_ajax_nopriv_'.PLUGIN_KEY.'_login_ajax', array($this, 'login_ajax_callback'));
-            add_action('wp_ajax_nopriv_'.PLUGIN_KEY.'_register_ajax', array($this, 'register_ajax_callback'));
-            add_action('wp_ajax_nopriv_'.PLUGIN_KEY.'_rp_send_email_ajax', array($this, 'rp_send_email_ajax_callback'));
-            add_action('wp_ajax_nopriv_'.PLUGIN_KEY.'_rp_change_password_ajax', array($this, 'rp_change_password_ajax_callback'));
-            add_action('wp_ajax_nopriv_'.PLUGIN_KEY.'_activate_account_ajax', array($this, 'activate_account_ajax_callback'));
-            add_action('wp_ajax_nopriv_'.PLUGIN_KEY.'_resend_activation_mail_ajax', array($this, 'resend_activation_mail_ajax_callback'));
-            add_action('wp_ajax_'.PLUGIN_KEY.'_delete_account_ajax', array($this, 'delete_account_ajax_callback'));
-            add_action('wp_ajax_'.PLUGIN_KEY.'_update_account_ajax', array($this, 'update_account_ajax_callback'));
+            add_action('wp_ajax_nopriv_'.$this->plugin_key().'_login_ajax', array($this, 'login_ajax_callback'));
+            add_action('wp_ajax_nopriv_'.$this->plugin_key().'_register_ajax', array($this, 'register_ajax_callback'));
+            add_action('wp_ajax_nopriv_'.$this->plugin_key().'_rp_send_email_ajax', array($this, 'rp_send_email_ajax_callback'));
+            add_action('wp_ajax_nopriv_'.$this->plugin_key().'_rp_change_password_ajax', array($this, 'rp_change_password_ajax_callback'));
+            add_action('wp_ajax_nopriv_'.$this->plugin_key().'_activate_account_ajax', array($this, 'activate_account_ajax_callback'));
+            add_action('wp_ajax_nopriv_'.$this->plugin_key().'_resend_activation_mail_ajax', array($this, 'resend_activation_mail_ajax_callback'));
+            add_action('wp_ajax_'.$this->plugin_key().'_delete_account_ajax', array($this, 'delete_account_ajax_callback'));
+            add_action('wp_ajax_'.$this->plugin_key().'_update_account_ajax', array($this, 'update_account_ajax_callback'));
         }
 
         public static function get_instance()
@@ -169,7 +171,7 @@
                 if ($this->configurations->limit_active_login === 'on' && $this->is_max_active_login()) {
                     $user_sessions    = get_user_meta($user->ID, 'session_tokens', true);
                     $sessions         = \WP_Session_Tokens::get_instance($user->ID);
-                    $max_active_login = get_option(PLUGIN_KEY.'_number_of_active_login', true);
+                    $max_active_login = get_option($this->plugin_key().'_number_of_active_login', true);
                     $subtractions     = count($user_sessions) - (int)$max_active_login;
 
                     if ($subtractions == 0) {
@@ -184,12 +186,12 @@
 
                 }
 
-                do_action(PLUGIN_KEY.'_before_login');
+                do_action($this->plugin_key().'_before_login');
 
                 $login = $this->login($form_data);
 
                 if ($login['success']) {
-                    do_action(PLUGIN_KEY.'_after_login');
+                    do_action($this->plugin_key().'_after_login');
                     wp_send_json(array(
                         'success'      => true,
                         'msg'          => __('You have logged in successfully!. Redirecting...', 'wp_users_handler'),
@@ -210,9 +212,9 @@
 
         public function register_ajax_callback()
         {
-            do_action(PLUGIN_KEY.'_before_register');
+            do_action($this->plugin_key().'_before_register');
             $this->register();
-            do_action(PLUGIN_KEY.'_after_register');
+            do_action($this->plugin_key().'_after_register');
         }
 
         public function rp_send_email_ajax_callback()
@@ -237,9 +239,9 @@
 
         public function update_account_ajax_callback()
         {
-            do_action(PLUGIN_KEY.'_before_update_profile');
+            do_action($this->plugin_key().'_before_update_profile');
             $this->update();
-            do_action(PLUGIN_KEY.'_after_update_profile');
+            do_action($this->plugin_key().'_after_update_profile');
         }
 
 
@@ -281,7 +283,7 @@
         private function set_user_defaults()
         {
             foreach ($this->defaults as $meta_key => $meta_value) {
-                update_user_meta($this->user_id, PLUGIN_KEY.'_'.$meta_key, $meta_value);
+                update_user_meta($this->user_id, $this->plugin_key().'_'.$meta_key, $meta_value);
             }
         }
 
@@ -324,7 +326,7 @@
         private function is_max_active_login()
         {
             $user_sessions    = get_user_meta($this->user_id, 'session_tokens', true);
-            $max_active_login = get_option(PLUGIN_KEY.'_number_of_active_login', true);
+            $max_active_login = get_option($this->plugin_key().'_number_of_active_login', true);
             if (count($user_sessions) >= $max_active_login) {
                 return true;
             }
@@ -352,7 +354,7 @@
             $object->name  = $user->data->display_name;
             $object->role  = self::get_user_role($user->data->ID);
             foreach ($this->defaults as $meta_key) {
-                $object->{$meta_key} = get_user_meta($user->data->ID, PLUGIN_KEY.'_'.$meta_key, true);
+                $object->{$meta_key} = get_user_meta($user->data->ID, $this->plugin_key().'_'.$meta_key, true);
             }
             return $object;
         }

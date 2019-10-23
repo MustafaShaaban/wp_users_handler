@@ -42,7 +42,7 @@
                 'status' => true,
             );
 
-            if (!wp_verify_nonce($data['nonce'], PLUGIN_KEY.'_LOGIN_FORM')) {
+            if (!wp_verify_nonce($data['nonce'], $this->plugin_key().'_LOGIN_FORM')) {
                 $error->add('invalid_nonce' , __("Your request can't be sent right now, Please come back later!.", "wp_users_handler"));
                 wp_send_json(array(
                     'success' => false,

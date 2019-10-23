@@ -2,6 +2,8 @@
 
     class Ms_api_cryptor
     {
+        use \UH\FUNCTIONS\Wp_functions;
+        
         protected $method = 'aes-128-ctr'; // default cipher method if none supplied
         private $key;
 
@@ -152,7 +154,7 @@
             /**
              * Handle encryption request.
              */
-            register_rest_route(PLUGIN_KEY, 'cryptor/(?P<type>\S+)', array(
+            register_rest_route($this->plugin_key(), 'cryptor/(?P<type>\S+)', array(
                 'methods'  => 'POST',
                 'callback' => array($this, 'handle_request'),
             ));

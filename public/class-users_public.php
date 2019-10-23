@@ -13,25 +13,31 @@
 
     namespace UH\FRONT\USERS;
 
-    use UH\FORMS\Forms_controller;
     use UH\FUNCTIONS\Wp_functions;
-    use UH\HANDLER\Wp_users_handler;
 
     class Users_Public
     {
         use Wp_functions;
-        public static $instance;
+
         private $login_form;
 
+        public static $instance;
+
+        /**
+         * Initialize the class and set its properties.
+         *
+         * @since    1.0.0
+         *
+         */
         public function __construct()
         {
             self::$instance   = $this;
 
-            add_shortcode(PLUGIN_KEY.'_login_form', array($this, 'create_login_form'));
-            add_shortcode(PLUGIN_KEY.'_registration_form', array($this, 'create_registration_form'));
-            add_shortcode(PLUGIN_KEY.'_rp_step1_form', array($this, 'create_rp_step1_form'));
-            add_shortcode(PLUGIN_KEY.'_rp_step2_form', array($this, 'create_rp_step2_form'));
-            add_shortcode(PLUGIN_KEY.'_account_setting_form', array($this, 'create_account_setting_form'));
+            add_shortcode($this->plugin_key().'_login_form', array($this, 'create_login_form'));
+            add_shortcode($this->plugin_key().'_registration_form', array($this, 'create_registration_form'));
+            add_shortcode($this->plugin_key().'_rp_step1_form', array($this, 'create_rp_step1_form'));
+            add_shortcode($this->plugin_key().'_rp_step2_form', array($this, 'create_rp_step2_form'));
+            add_shortcode($this->plugin_key().'_account_setting_form', array($this, 'create_account_setting_form'));
 
         }
 
@@ -78,8 +84,6 @@
                     'order'        => 15
                 ]
             ];
-
-
 
             ob_start();
             $this->get_public_template('login-form');

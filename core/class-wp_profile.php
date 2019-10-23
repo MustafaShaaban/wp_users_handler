@@ -14,11 +14,13 @@
     namespace UH\PROFILE;
 
     use UH\CRYPTOR\wp_cryptor;
+    use UH\FUNCTIONS\Wp_functions;
     use UH\VALIDATIONS\Wp_validations;
 
     class Wp_profile
     {
         use Wp_validations;
+        use Wp_functions;
 
         public static $instance;
         private $defaults = [];
@@ -32,10 +34,10 @@
         {
             self::$instance = $this;
             add_action('init', array($this, 'profile_post_type'));
-            add_action('wp_ajax_'.PLUGIN_KEY.'_update_profile_ajax', array($this, 'update_profile_ajax_callback'));
-            add_action('wp_ajax_'.PLUGIN_KEY.'_update_avatar_ajax', array($this, 'update_avatar_ajax_callback'));
-            add_action('wp_ajax_'.PLUGIN_KEY.'_profile_search_ajax', array($this, 'profile_search_ajax_callback'));
-            add_action('wp_ajax_nopriv_'.PLUGIN_KEY.'_profile_search_ajax', array($this, 'profile_search_ajax_callback'));
+            add_action('wp_ajax_'.$this->plugin_key().'_update_profile_ajax', array($this, 'update_profile_ajax_callback'));
+            add_action('wp_ajax_'.$this->plugin_key().'_update_avatar_ajax', array($this, 'update_avatar_ajax_callback'));
+            add_action('wp_ajax_'.$this->plugin_key().'_profile_search_ajax', array($this, 'profile_search_ajax_callback'));
+            add_action('wp_ajax_nopriv_'.$this->plugin_key().'_profile_search_ajax', array($this, 'profile_search_ajax_callback'));
         }
 
         public static function get_instance()

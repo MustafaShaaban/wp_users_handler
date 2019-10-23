@@ -39,6 +39,33 @@
         private $plugin_name;
 
         /**
+         * The path of this plugin.
+         *
+         * @since    1.0.0
+         * @access   private
+         * @var      string $plugin_path The path of this plugin.
+         */
+        private $plugin_path;
+
+        /**
+         * The url of this plugin.
+         *
+         * @since    1.0.0
+         * @access   private
+         * @var      string $plugin_url The url of this plugin.
+         */
+        private $plugin_url;
+
+        /**
+         * The convention key of this plugin.
+         *
+         * @since    1.0.0
+         * @access   private
+         * @var      string $plugin_key The convention key of this plugin.
+         */
+        private $plugin_key;
+
+        /**
          * The version of this plugin.
          *
          * @since    1.0.0
@@ -80,18 +107,33 @@
          * @since    1.0.0
          *
          * @param      string $plugin_name The name of this plugin.
-         * @param      string $version The version of this plugin.
+         * @param      string $plugin_version The version of this plugin.
+         * @param      string $plugin_path The path of this plugin.
+         * @param      string $plugin_url The url of this plugin.
+         * @param      string $plugin_key The convention key of this plugin.
+
          */
-        public function __construct($plugin_name, $version)
+        public function __construct($plugin_name, $plugin_version, $plugin_path, $plugin_url, $plugin_key)
         {
 
             $this->plugin_name = $plugin_name;
-            $this->version     = $version;
-            $this->css         = PLUGIN_URL.'admin/css/';
-            $this->js          = PLUGIN_URL.'admin/js/';
-            $this->img         = PLUGIN_URL.'admin/img/';
+            $this->version     = $plugin_version;
+            $this->plugin_path = $plugin_path;
+            $this->plugin_url  = $plugin_url;
+            $this->plugin_key  = $plugin_key;
+            $this->css         = $this->plugin_url.'admin/css/';
+            $this->js          = $this->plugin_url.'admin/js/';
+            $this->img         = $this->plugin_url.'admin/img/';
 
-            require_once PLUGIN_PATH.'admin/class-users_admin.php';
+            $this->require_files();
+        }
+
+        /**
+         * This function responsible for include required admin classes
+         */
+        private function require_files()
+        {
+            require_once $this->plugin_path.'admin/class-users_admin.php';
 
         }
 
@@ -114,7 +156,7 @@
              * between the defined hooks and the functions defined in this
              * class.
              */
-            if (isset($_GET['page']) && $_GET['page'] === PLUGIN_KEY.'-main-page') {
+            if (isset($_GET['page']) && $_GET['page'] === $this->plugin_key.'-main-page') {
                 wp_enqueue_style($this->plugin_name.'-bootstrap', $this->css.'bootstrap.min.css', array(), $this->version, 'all');
                 wp_enqueue_style($this->plugin_name.'-loading', $this->css.'pl-loading.css', array(), $this->version, 'all');
                 wp_enqueue_style($this->plugin_name, $this->css.'wp_users_handler-admin.css', array(), $this->version, 'all');
@@ -142,13 +184,13 @@
              * class.
              */
 
-            if (isset($_GET['page']) && $_GET['page'] === PLUGIN_KEY.'-main-page') {
+            if (isset($_GET['page']) && $_GET['page'] === $this->plugin_key.'-main-page') {
                 wp_enqueue_script($this->plugin_name.'-bootstrap', $this->js.'bootstrap.min.js', array('jquery'), $this->version, false);
             }
             wp_enqueue_script($this->plugin_name, $this->js.'wp_users_handler-admin.js', array('jquery'), $this->version, false);
             wp_localize_script($this->plugin_name, 'pl_globals', array(
                 'ajaxUrl'    => admin_url('admin-ajax.php'),
-                'plugin_key' => PLUGIN_KEY
+                'plugin_key' => $this->plugin_key
             ));
         }
 

@@ -27,6 +27,33 @@
         private $plugin_name;
 
         /**
+         * The path of this plugin.
+         *
+         * @since    1.0.0
+         * @access   private
+         * @var      string $plugin_path The path of this plugin.
+         */
+        private $plugin_path;
+
+        /**
+         * The url of this plugin.
+         *
+         * @since    1.0.0
+         * @access   private
+         * @var      string $plugin_url The url of this plugin.
+         */
+        private $plugin_url;
+
+        /**
+         * The convention key of this plugin.
+         *
+         * @since    1.0.0
+         * @access   private
+         * @var      string $plugin_key The convention key of this plugin.
+         */
+        private $plugin_key;
+
+        /**
          * The version of this plugin.
          *
          * @since    1.0.0
@@ -68,16 +95,22 @@
          * @since    1.0.0
          *
          * @param      string $plugin_name The name of the plugin.
-         * @param      string $version The version of this plugin.
+         * @param      string $plugin_version The version of this plugin.
+         * @param      string $plugin_path The path of this plugin.
+         * @param      string $plugin_url The url of this plugin.
+         * @param      string $plugin_key The convention key of this plugin.
          */
-        public function __construct($plugin_name, $version)
+        public function __construct($plugin_name, $plugin_version, $plugin_path, $plugin_url, $plugin_key)
         {
-
             $this->plugin_name = $plugin_name;
-            $this->version     = $version;
-            $this->css         = PLUGIN_URL.'public/css/';
-            $this->js          = PLUGIN_URL.'public/js/';
-            $this->img         = PLUGIN_URL.'public/img/';
+            $this->version     = $plugin_version;
+            $this->plugin_path = $plugin_path;
+            $this->plugin_url  = $plugin_url;
+            $this->plugin_key  = $plugin_key;
+            $this->css         = $this->plugin_url.'public/css/';
+            $this->js          = $this->plugin_url.'public/js/';
+            $this->img         = $this->plugin_url.'public/img/';
+
             $this->require_files();
 
         }
@@ -85,10 +118,10 @@
         /**
          * This function responsible for include required public facing classes
          */
-        public function require_files()
+        private function require_files()
         {
-            require_once PLUGIN_PATH.'public/class-profile_public.php';
-            require_once PLUGIN_PATH.'public/class-users_public.php';
+            require_once $this->plugin_path.'public/class-users_public.php';
+            require_once $this->plugin_path.'public/class-profile_public.php';
         }
 
         /**
@@ -142,7 +175,7 @@
             wp_enqueue_script($this->plugin_name.'-bootstrap', $this->js.'bootstrap.min.js', array('jquery'), $this->version, true);
             wp_enqueue_script($this->plugin_name, $this->js.'wp_users_handler-public.js', array('jquery'), $this->version, true);
             wp_localize_script($this->plugin_name, 'pl_globals', array(
-                'pl_key'  => PLUGIN_KEY,
+                'pl_key'  => $this->plugin_key,
                 'ajaxUrl' => admin_url('admin-ajax.php')
             ));
             wp_localize_script($this->plugin_name, 'pl_phrases', array(

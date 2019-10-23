@@ -23,8 +23,11 @@
 
     namespace UH\ACTIVATOR;
 
+    use UH\FUNCTIONS\Wp_functions;
+
     class Wp_users_handler_Activator
     {
+        use Wp_functions;
 
         public function __construct()
         {
@@ -49,17 +52,17 @@
             $configurations->block_users            = 'off';
             $configurations->number_of_active_login = 1;
 
-            update_option(PLUGIN_KEY.'_configurations', $configurations);
+            update_option(WP_USERS_HANDLER_PLUGIN_KEY.'_configurations', $configurations);
         }
 
         public function register_pl_menus()
         {
-            add_menu_page(__(PLUGIN_NAME, 'wp_users_handler'), __(PLUGIN_NAME, 'wp_users_handler'), 'add_users', PLUGIN_KEY.'-main-page', array($this, 'page_content'), PLUGIN_URL.'admin/img/users-icon.png', 6);
+            add_menu_page(__($this->plugin_title(), 'wp_users_handler'), __($this->plugin_title(), 'wp_users_handler'), 'add_users', $this->plugin_key().'-main-page', array($this, 'page_content'), $this->plugin_url().'admin/img/users-icon.png', 6);
         }
 
         public function page_content()
         {
-            return include PLUGIN_PATH.'admin/templates/main-page.php';
+            return include $this->plugin_path().'admin/templates/main-page.php';
         }
 
     }

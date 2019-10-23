@@ -1,10 +1,10 @@
 <?php
-    $options = get_option(PLUGIN_KEY.'_configurations', true);
+    $options = get_option($this->plugin_key().'_configurations', true);
 ?>
     <div class="uh-main-page">
         <div class="page-content">
             <header class="pl-page-header">
-                <h1><?= PLUGIN_NAME ?></h1>
+                <h1><?= $this->plugin_title() ?></h1>
             </header>
             <div class="pl-page-body">
                 <div class="container-fluid">

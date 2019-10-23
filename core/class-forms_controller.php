@@ -8,10 +8,12 @@
 
     namespace UH\FORMS;
 
+    use UH\FUNCTIONS\Wp_functions;
     use UH\HANDLER\Wp_users_handler;
 
     class Forms_controller
     {
+        use Wp_functions;
         public static $instance;
 
         /**
@@ -23,8 +25,8 @@
         {
             self::$instance = $this;
             $loader         = Wp_users_handler::get_instance()->get_loader();
-            $loader->add_action(PLUGIN_KEY.'_create_hidden_inputs', $this, 'create_hidden_inputs', 10, 1);
-            $loader->add_action(PLUGIN_KEY.'_create_nonce', $this, 'create_none', 10, 2);
+            $loader->add_action($this->plugin_key().'_create_hidden_inputs', $this, 'create_hidden_inputs', 10, 1);
+            $loader->add_action($this->plugin_key().'_create_nonce', $this, 'create_none', 10, 2);
         }
 
         public static function get_instance()
@@ -93,7 +95,7 @@
 
             ob_start();
             ?>
-            <form action="" class="<?= PLUGIN_KEY ?>_form <?= $input_data['class'] ?>" id="<?= $input_data['id'] ?>">
+            <form action="" class="<?= $this->plugin_key() ?>_form <?= $input_data['class'] ?>" id="<?= $input_data['id'] ?>">
             <?php
             echo ob_get_clean();
         }
@@ -158,7 +160,7 @@
          * required      => ''
          * placeholder   => ''
          * class         => ''
-         * id            => default is PLUGIN_KEY_name
+         * id            => default is $this->plugin_key()_name
          * value         => ''
          * default_value => ''
          * visibility    => ''
@@ -187,7 +189,7 @@
                 'required'      => '',
                 'placeholder'   => '',
                 'class'         => '',
-                'id'            => (empty($args['name'])) ? "" : PLUGIN_KEY.'_'.$args['name'],
+                'id'            => (empty($args['name'])) ? "" : $this->plugin_key().'_'.$args['name'],
                 'value'         => '',
                 'default_value' => '',
                 'visibility'    => '',
@@ -246,7 +248,7 @@
          * required      => ''
          * placeholder   => ''
          * class         => ''
-         * id            => default is PLUGIN_KEY_name
+         * id            => default is $this->plugin_key()_name
          * value         => ''
          * before        => ''
          * after         => ''
@@ -268,7 +270,7 @@
                 'required'     => '',
                 'placeholder'  => '',
                 'class'        => '',
-                'id'           => (empty($args['name'])) ? "" : PLUGIN_KEY.'_'.$args['name'],
+                'id'           => (empty($args['name'])) ? "" : $this->plugin_key().'_'.$args['name'],
                 'value'        => '',
                 'before'       => '',
                 'after'        => '',
@@ -311,7 +313,7 @@
          * name         => ''
          * required     => ''
          * class        => ''
-         * id           => default is PLUGIN_KEY_name
+         * id           => default is $this->plugin_key()_name
          * before       => ''
          * after        => ''
          * hint         => ''
@@ -331,7 +333,7 @@
                 'name'       => '',
                 'required'   => '',
                 'class'      => '',
-                'id'         => (empty($args['name'])) ? "" : PLUGIN_KEY.'_'.$args['name'],
+                'id'         => (empty($args['name'])) ? "" : $this->plugin_key().'_'.$args['name'],
                 'before'     => '',
                 'after'      => '',
                 'hint'       => '',
@@ -385,7 +387,7 @@
          * default_option => ''
          * select_option  => ''
          * class          => ''
-         * id             => default is PLUGIN_KEY_name
+         * id             => default is $this->plugin_key()_name
          * before         => ''
          * after          => ''
          * multiple       => ''
@@ -406,7 +408,7 @@
                 'default_option' => '',
                 'select_option'  => '',
                 'class'          => '',
-                'id'             => (empty($args['name'])) ? "" : PLUGIN_KEY.'_'.$args['name'],
+                'id'             => (empty($args['name'])) ? "" : $this->plugin_key().'_'.$args['name'],
                 'before'         => '',
                 'after'          => '',
                 'multiple'       => '',
@@ -449,7 +451,7 @@
          *      name'       => ''
          *      required'   => ''
          *      class'      => ''
-         *      id'         => default is PLUGIN_KEY_name
+         *      id'         => default is $this->plugin_key()_name
          *      value'      => ''
          *      before'     => ''
          *      after'      => ''
@@ -487,7 +489,7 @@
             $count = 0;
             foreach ($input_data['choices'] as $name) {
                 if (empty($name['id'])) {
-                    $id = (empty($name['name'])) ? "" : PLUGIN_KEY.'_'.str_replace('[]', '', $name['name']).$count;
+                    $id = (empty($name['name'])) ? "" : $this->plugin_key().'_'.str_replace('[]', '', $name['name']).$count;
                     $count++;
                 } else {
                     $id = $name['id'];
@@ -521,7 +523,7 @@
          *      label'      => ''
          *      required'   => ''
          *      class'      => ''
-         *      id'         => default is PLUGIN_KEY_name
+         *      id'         => default is $this->plugin_key()_name
          *      value'      => ''
          *      before'     => ''
          *      after'      => ''
@@ -544,7 +546,7 @@
                         'label'      => '',
                         'required'   => '',
                         'class'      => '',
-                        'id'         => (empty($args['choices']['name'])) ? "" : PLUGIN_KEY.'_'.$args['choices']['name'],
+                        'id'         => (empty($args['choices']['name'])) ? "" : $this->plugin_key().'_'.$args['choices']['name'],
                         'value'      => '',
                         'before'     => '',
                         'after'      => '',
@@ -559,7 +561,7 @@
             $count = 0;
             foreach ($input_data['choices'] as $name) {
                 if (empty($name['id'])) {
-                    $id = (empty($name['name'])) ? "" : PLUGIN_KEY.'_'.str_replace('[]', '', $name['name']).$count;
+                    $id = (empty($name['name'])) ? "" : $this->plugin_key().'_'.str_replace('[]', '', $name['name']).$count;
                     $count++;
                 } else {
                     $id = $name['id'];
@@ -591,7 +593,7 @@
          * name'       => ''
          * required'   => ''
          * class'      => ''
-         * id'         => default is PLUGIN_KEY_name
+         * id'         => default is $this->plugin_key()_name
          * before'     => ''
          * after'      => ''
          * checked'    => ''
@@ -609,7 +611,7 @@
                 'name'       => '',
                 'required'   => '',
                 'class'      => '',
-                'id'         => (empty($args['name'])) ? "" : PLUGIN_KEY.'_'.$args['name'],
+                'id'         => (empty($args['name'])) ? "" : $this->plugin_key().'_'.$args['name'],
                 'before'     => '',
                 'after'      => '',
                 'checked'    => '',
@@ -624,7 +626,7 @@
                 <?= $input_data['before'] ?>
                 <?= $require ?>
                 <input type="checkbox"
-                       class="custom-control-input pl-form-input pl-switch <?= PLUGIN_KEY.'-'.$input_data['class'] ?>"
+                       class="custom-control-input pl-form-input pl-switch <?= $this->plugin_key().'-'.$input_data['class'] ?>"
                        id="<?= $input_data['id'] ?>"
                        name="<?= $input_data['name'] ?>"
                     <?= $input_data['required'] ?> <?= $this->create_attr($input_data) ?> <?= $input_data['checked'] ?>>
