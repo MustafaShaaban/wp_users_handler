@@ -21,6 +21,7 @@
          * Initialize the class and set its properties.
          *
          * @since    1.0.0
+         *
          */
         public function __construct()
         {
@@ -37,5 +38,6 @@
 
 
     }
+
     new Profile_Public();
     

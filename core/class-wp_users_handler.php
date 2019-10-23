@@ -33,9 +33,11 @@
     use UH\TEXT_DOMAIN\Wp_users_handler_i18n;
     use UH\ADMIN\MAIN\Wp_users_handler_Admin;
     use UH\FRONT\MAIN\Wp_users_handler_Public;
+    use UH\FUNCTIONS\Wp_functions;
 
     class Wp_users_handler
     {
+        use Wp_functions;
 
         /**
          * The loader that's responsible for maintaining and registering all hooks that power
@@ -47,23 +49,7 @@
          */
         protected $loader;
 
-        /**
-         * The unique identifier of this plugin.
-         *
-         * @since    1.0.0
-         * @access   protected
-         * @var      string $plugin_name The string used to uniquely identify this plugin.
-         */
-        protected $plugin_name;
-
-        /**
-         * The current version of the plugin.
-         *
-         * @since    1.0.0
-         * @access   protected
-         * @var      string $version The current version of the plugin.
-         */
-        protected $version;
+        public static $instance;
 
         /**
          * Define the core functionality of the plugin.
@@ -76,18 +62,20 @@
          */
         public function __construct()
         {
-            if (defined('WP_USERS_HANDLER_VERSION')) {
-                $this->version = WP_USERS_HANDLER_VERSION;
-            } else {
-                $this->version = '1.0.0';
-            }
-            $this->plugin_name = 'wp_users_handler';
+            self::$instance = $this;
 
             $this->load_dependencies();
             $this->set_locale();
             $this->define_admin_hooks();
             $this->define_public_hooks();
+        }
 
+        public static function get_instance()
+        {
+            if (self::$instance === null) {
+                self::$instance = new self();
+            }
+            return self::$instance;
         }
 
         /**
@@ -113,47 +101,51 @@
              * The class responsible for orchestrating the actions and filters of the
              * core plugin.
              */
-            require_once PLUGIN_PATH.'core/class-wp_users_handler_loader.php';
+            require_once $this->plugin_path().'core/class-wp_users_handler_loader.php';
 
             /**
              * The class responsible for defining internationalization functionality
              * of the plugin.
              */
-            require_once PLUGIN_PATH.'core/class-wp_users_handler_i18n.php';
+            require_once $this->plugin_path().'core/class-wp_users_handler_i18n.php';
 
             /**
              * The class responsible for crypt and decrypt
              * strings, urls and password.
              */
-            require_once PLUGIN_PATH.'helpers/class-wp_cryptor.php';
+            require_once $this->plugin_path().'helpers/class-wp_cryptor.php';
 
             /**
              * The class responsible for crypt and decrypt
              * strings, urls and password.
              */
-            require_once PLUGIN_PATH.'helpers/class-wp_validations.php';
+            require_once $this->plugin_path().'helpers/class-wp_validations.php';
+
+            /**
+             * The class responsible for manage the plugin forms.
+             */
+            require_once $this->plugin_path().'core/class-forms_controller.php';
 
             /**
              * The class responsible for all core users operations.
              */
-            require_once PLUGIN_PATH.'core/class-users.php';
+            require_once $this->plugin_path().'core/class-wp_users.php';
 
             /**
              * The class responsible for all core profile operations.
              */
-            require_once PLUGIN_PATH.'core/class-profile.php';
+            require_once $this->plugin_path().'core/class-wp_profile.php';
 
             /**
              * The class responsible for defining all actions that occur in the admin area.
              */
-            require_once PLUGIN_PATH.'admin/class-wp_users_handler_admin.php';
+            require_once $this->plugin_path().'admin/class-wp_users_handler_admin.php';
 
             /**
              * The class responsible for defining all actions that occur in the public-facing
              * side of the site.
              */
-            require_once PLUGIN_PATH.'public/class-wp_users_handler_public.php';
-
+            require_once $this->plugin_path().'public/class-wp_users_handler_public.php';
 
 
             $this->loader = new Wp_users_handler_Loader();
@@ -187,7 +179,7 @@
         private function define_admin_hooks()
         {
 
-            $plugin_admin = new Wp_users_handler_Admin($this->get_plugin_name(), $this->get_version());
+            $plugin_admin = new Wp_users_handler_Admin($this->plugin_name(), $this->plugin_version(), $this->plugin_path(), $this->plugin_url(), $this->plugin_key());
 
             $this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_styles');
             $this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts');
@@ -204,7 +196,7 @@
         private function define_public_hooks()
         {
 
-            $plugin_public = new Wp_users_handler_Public($this->get_plugin_name(), $this->get_version());
+            $plugin_public = new Wp_users_handler_Public($this->plugin_name(), $this->plugin_version(), $this->plugin_path(), $this->plugin_url(), $this->plugin_key());
 
             $this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_styles');
             $this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_scripts');
@@ -222,18 +214,6 @@
         }
 
         /**
-         * The name of the plugin used to uniquely identify it within the context of
-         * WordPress and to define internationalization functionality.
-         *
-         * @since     1.0.0
-         * @return    string    The name of the plugin.
-         */
-        public function get_plugin_name()
-        {
-            return $this->plugin_name;
-        }
-
-        /**
          * The reference to the class that orchestrates the hooks with the plugin.
          *
          * @since     1.0.0
@@ -242,17 +222,6 @@
         public function get_loader()
         {
             return $this->loader;
-        }
-
-        /**
-         * Retrieve the version number of the plugin.
-         *
-         * @since     1.0.0
-         * @return    string    The version number of the plugin.
-         */
-        public function get_version()
-        {
-            return $this->version;
         }
 
     }

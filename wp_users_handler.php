@@ -36,16 +36,31 @@
         die;
     }
 
+
     /**
-     * Defining the Wp_users_handler plugin path
+     * Defining the plugin Title.
      */
-    define('PLUGIN_PATH', plugin_dir_path(__FILE__));
-    define('PLUGIN_URL', plugin_dir_url( __FILE__ ));
+    define('WP_USERS_HANDLER_PLUGIN_TITLE', 'WP Users Handler');
+
+    /**
+     * Defining the plugin name.
+     */
+    define('WP_USERS_HANDLER_PLUGIN_NAME', 'wp_users_handler');
+
+    /**
+     * Define the plugins' main directory path
+     */
+    define('WP_USERS_HANDLER_PLUGIN_PATH', plugin_dir_path(__FILE__));
+
+    /**
+     * Define the plugins' main URL path
+     */
+    define('WP_USERS_HANDLER_PLUGIN_URL', plugin_dir_url(__FILE__));
 
     /**
      * Defining the plugin convention key
      */
-    define('PLUGIN_KEY', 'UH');
+    define('WP_USERS_HANDLER_PLUGIN_KEY', 'UH');
 
     /**
      * Currently plugin version.
@@ -56,7 +71,6 @@
 
     class Wp_users_handler_basic
     {
-
         /**
          * Define the basic functionality of the plugin.
          *
@@ -78,22 +92,27 @@
         private function require_files()
         {
             /**
+             * The class responsible for global functions
+             */
+            require_once WP_USERS_HANDLER_PLUGIN_PATH.'core/class-wp_functions.php';
+
+            /**
              * The class responsible for defining all code necessary
              * to run during the plugin's activation.
              */
-            require_once PLUGIN_PATH.'core/class-wp_users_handler_activator.php';
+            require_once WP_USERS_HANDLER_PLUGIN_PATH.'core/class-wp_users_handler_activator.php';
 
             /**
              * The class responsible for defining all code necessary
              * to run during the plugin's deactivation.
              */
-            require_once PLUGIN_PATH.'core/class-wp_users_handler_deactivator.php';
+            require_once WP_USERS_HANDLER_PLUGIN_PATH.'core/class-wp_users_handler_deactivator.php';
 
             /**
              * The core plugin class that is used to define internationalization,
              * admin-specific hooks, and public-facing site hooks.
              */
-            require PLUGIN_PATH.'core/class-wp_users_handler.php';
+            require WP_USERS_HANDLER_PLUGIN_PATH.'core/class-wp_users_handler.php';
         }
 
         /**
@@ -128,7 +147,6 @@
             $plugin = new Wp_users_handler();
             $plugin->run();
         }
-
     }
 
     new Wp_users_handler_basic();
