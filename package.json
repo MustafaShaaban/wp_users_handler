@@ -1,0 +1,22 @@
+{
+  "name": "wp_users_handler",
+  "version": "1.0.0",
+  "description": "Contributors: (this should be a list of wordpress.org userid's)\r Donate link: https://www.linkedin.com/in/mustafa-shaaban22/\r Tags: comments, spam\r Requires at least: 3.0.1\r Tested up to: 3.4\r Stable tag: 4.3\r License: GPLv2 or later\r License URI: http://www.gnu.org/licenses/gpl-2.0.html",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MustafaShaaban/wp_users_handler.git"
+  },
+  "author": "Mustafa Shaaban",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MustafaShaaban/wp_users_handler/issues"
+  },
+  "homepage": "https://github.com/MustafaShaaban/wp_users_handler#readme",
+  "devDependencies": {
+    "gulp": "^4.0.2"
+  }
+}
