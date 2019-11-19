@@ -202,7 +202,7 @@
                         }
 
                         // calculate available active accounts to be excluded
-                        $subtractions     = count($tokens) - (int)$this->configurations->number_of_active_login;
+                        $subtractions = count($tokens) - (int)$this->configurations->number_of_active_login;
 
                         // destroy exceeded sessions
                         if ($subtractions == 0) {
@@ -227,16 +227,21 @@
 
                 }
 
-                do_action($this->plugin_key().'_before_login');
+                do_action($this->plugin_key().'_before_login', $user->ID, $form_data);
+
+                $form_data = apply_filters($this->plugin_key().'_filter_form_data', $form_data);
 
                 $login = $this->login($form_data);
 
                 if ($login['success']) {
-                    do_action($this->plugin_key().'_after_login');
+                    do_action($this->plugin_key().'_after_login', $user->ID);
+
+                    $url = apply_filters($this->plugin_key().'_change_login_redirection', $form_data['_wp_http_referer']);
+
                     wp_send_json(array(
                         'success'      => true,
                         'msg'          => __('You have logged in successfully!. Redirecting...', 'wp_users_handler'),
-                        'redirect_url' => $form_data['_wp_http_referer'],
+                        'redirect_url' => $url,
                     ));
                 } else {
                     wp_send_json($login);
@@ -378,7 +383,8 @@
 
         /* -------------- Start Of Action Functions  -------------- */
 
-        public function add_login_tokens($logged_in_cookie, $expire, $expiration, $user_id, $logged_in_text, $token) {
+        public function add_login_tokens($logged_in_cookie, $expire, $expiration, $user_id, $logged_in_text, $token)
+        {
             $tokens = get_user_meta($user_id, 'login_tokens', true);
             if (empty($tokens)) {
                 $tokens = [$logged_in_cookie];
