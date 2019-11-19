@@ -29,9 +29,12 @@
 	 * practising this, we should strive to set a better example in our own work.
 	 */
 
+	const public_ajaxRequests = {};
+
 	const pl_basic = {
 		init: function () {
 			this.prepare();
+			pl_login.init();
 		},
 		prepare: function () {
 			$.validator.addMethod(
@@ -60,18 +63,14 @@
 			);
 			$.validator.setDefaults({
 				errorPlacement: function(label, element) {
-					label.addClass('lg-error');
-					if ($('.pmpro_asterisk').length > 0) {
-						label.insertAfter(element.parent().find('.pmpro_asterisk'));
-					}else{
-						label.insertAfter(element);
-					}
+					label.addClass('pl-error');
+					label.insertAfter(element);
 				},
 				highlight: function(element) {
-					$(element).addClass('lg-error-input');
+					$(element).addClass('pl-error-input');
 				},
 				unhighlight: function(element) {
-					$(element).removeClass('lg-error-input');
+					$(element).removeClass('pl-error-input');
 				},
 			});
 
@@ -88,6 +87,88 @@
 		}
 	};
 
+	const pl_notices = {
+		init: function () {
+			this.forms();
+		},
+		forms: function (msg, $wrapper, type = 'error') {
+			let html_success = '<div class="pl-form-notice"><div class="success"><p>' + msg + '</p></div></div>',
+				html_false = '<div class="pl-form-notice"><div class="error"><p>' + msg + '</p></div></div>';
+			$wrapper.find('.pl-form-notice').remove();
+			if (type === 'success') {
+				$wrapper.prepend(html_success);
+			} else if (type === 'error') {
+				$wrapper.prepend(html_false);
+			}
+		},
+	};
+
+	const pl_login = {
+		init: function () {
+			this.login();
+		},
+
+		login: function () {
+			let that = this,
+				$form = $('#UH_login_form');
+
+			if ($form.length > 0) {
+				this.initValidation($form);
+			}
+
+			$form.live('submit', function (e) {
+				e.preventDefault();
+				let $this = $(e.currentTarget),
+					formData = $this.serializeObject();
+
+				if (typeof public_ajaxRequests.login !== 'undefined') {
+					public_ajaxRequests.login.abort();
+				}
+
+				public_ajaxRequests.login = $.ajax({
+					url: pl_globals.ajaxUrl,
+					type: 'POST',
+					data: {
+						action: 'UH_login_ajax',
+						data: formData
+					},
+					beforeSend: function () {
+						$('input').prop('disabled', true);
+					},
+					success: function (res) {
+						$('input').prop('disabled', false);
+						if (res.success) {
+							pl_notices.forms(res.msg, $this, 'success');
+							window.location.href = res.redirect_url;
+						} else {
+							pl_notices.forms(res.msg, $this);
+						}
+					},
+					error: function (xhr, status, error) {
+						var errorMessage = xhr.status + ': ' + xhr.statusText;
+						if (xhr.statusText !== 'abort') {
+							console.error('Error - ' + errorMessage);
+						}
+					}
+				});
+			})
+		},
+
+		initValidation: function(el) {
+			el.validate({
+				normalizer: function (value) {
+					return $.trim(value);
+				},
+				rules: {
+					user_login: "required",
+					user_password: "required",
+				}
+			});
+		}
+
+	};
+
+
 	$(document).ready(function (e) {
 		pl_basic.init();
 	});
@@ -96,10 +177,5 @@
 		var fileName = $(this).val().split("\\").pop();
 		$(this).siblings(".custom-file-label").addClass("selected").html(fileName);
 	});
-
-	$('#UH_login_form').live('submit', function (e) {
-		e.preventDefault();
-		alert();
-	})
 
 })( jQuery );

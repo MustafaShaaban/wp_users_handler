@@ -68,23 +68,23 @@
                 return $return;
             }
 
-            if (strlen($this->filterStrings($data['user_login'])) < 5) {
-                $error->add('Invalid_user_login_length', __('You Username/Email is invalid.', 'wp_users_handler'));
-                $return = array(
-                    'status' => false,
-                    'msg' => $error->get_error_message()
-                );
-                return $return;
-            }
-
-            if (strlen($this->filterStrings($data['user_password'])) < 8) {
-                $error->add('Invalid_password_length', __('You password is invalid.', 'wp_users_handler'));
-                $return = array(
-                    'status' => false,
-                    'msg' => $error->get_error_message()
-                );
-                return $return;
-            }
+//            if (strlen($this->filterStrings($data['user_login'])) < 5) {
+//                $error->add('Invalid_user_login_length', __('You Username/Email is invalid.', 'wp_users_handler'));
+//                $return = array(
+//                    'status' => false,
+//                    'msg' => $error->get_error_message()
+//                );
+//                return $return;
+//            }
+//
+//            if (strlen($this->filterStrings($data['user_password'])) < 8) {
+//                $error->add('Invalid_password_length', __('You password is invalid.', 'wp_users_handler'));
+//                $return = array(
+//                    'status' => false,
+//                    'msg' => $error->get_error_message()
+//                );
+//                return $return;
+//            }
 
             return $return;
         }

@@ -41,7 +41,7 @@
     {
         use Wp_validations;
         use Wp_functions;
-        
+
         public static $instance;
         private $defaults = [];
         private $configurations;
@@ -72,6 +72,7 @@
             add_action('wp_ajax_nopriv_'.$this->plugin_key().'_resend_activation_mail_ajax', array($this, 'resend_activation_mail_ajax_callback'));
             add_action('wp_ajax_'.$this->plugin_key().'_delete_account_ajax', array($this, 'delete_account_ajax_callback'));
             add_action('wp_ajax_'.$this->plugin_key().'_update_account_ajax', array($this, 'update_account_ajax_callback'));
+            add_action('set_logged_in_cookie', array($this, 'add_login_tokens'), 10, 6);
         }
 
         public static function get_instance()
@@ -107,7 +108,6 @@
                 ));
             }
 
-
             $user = get_user_by('login', $user_login);
             if (empty($user)) {
                 $user = get_user_by('email', $user_login);
@@ -119,7 +119,6 @@
                     ));
                 }
             }
-
 
             if (!empty($user)) {
 
@@ -136,6 +135,7 @@
                 $this->user_id = $user->ID;
                 $user          = $this->convert($user);
 
+                /* Email confirmation option */
                 if ($this->configurations->email_confirmation === 'on' && !$this->is_confirm($user)) {
                     $error->add('email_confirmation', __("Your account is pending!, Please check your E-mail to activate your account.", "wp_users_handler"));
                     wp_send_json(array(
@@ -144,6 +144,7 @@
                     ));
                 }
 
+                /* Admin approval option */
                 if ($this->configurations->admin_approval === 'on' && $this->is_pending($user)) {
                     $error->add('admin_approval', __("Your account is pending!, Your account needs an approval from admin first.", "wp_users_handler"));
                     wp_send_json(array(
@@ -152,6 +153,7 @@
                     ));
                 }
 
+                /* Blocking users option */
                 if ($this->is_blocked($user)) {
                     $error->add('account_blocked', __("Your account is blocked!, You have been blocked by the admin.", "wp_users_handler"));
                     wp_send_json(array(
@@ -160,6 +162,7 @@
                     ));
                 }
 
+                /* Limit login by network ip option */
                 if ($this->configurations->login_network === 'on' && !$this->is_network($user)) {
                     $error->add('invalid_ip', __("You can't login from this network.", "wp_users_handler"));
                     wp_send_json(array(
@@ -168,20 +171,58 @@
                     ));
                 }
 
+                /* Limit login by active accounts option */
                 if ($this->configurations->limit_active_login === 'on' && $this->is_max_active_login()) {
-                    $user_sessions    = get_user_meta($user->ID, 'session_tokens', true);
-                    $sessions         = \WP_Session_Tokens::get_instance($user->ID);
-                    $max_active_login = get_option($this->plugin_key().'_number_of_active_login', true);
-                    $subtractions     = count($user_sessions) - (int)$max_active_login;
 
-                    if ($subtractions == 0) {
-                        $session = array_slice($user_sessions, 0, 1);
-                        $sessions->destroy(key($session));
-                    } elseif ($subtractions > 0) {
-                        $sessions_arr = array_slice($user_sessions, 0, ($subtractions + 1));
-                        foreach ($sessions_arr as $session_key => $session_value) {
-                            $sessions->destroy($session_key);
+                    // Sessions and token data
+                    $user_sessions = get_user_meta($user->ID, 'session_tokens', true);
+                    $sessions      = \WP_Session_Tokens::get_instance($user->ID);
+                    $login_tokens  = get_user_meta($user->ID, 'login_tokens', true);
+
+                    // If first time after activate the option ? logout the user from all sessions.
+                    if (count($user_sessions) > count($login_tokens)) {
+                        $sessions->destroy_all();
+                        update_user_meta($user->ID, 'login_tokens', '');
+                        $login_tokens = [];
+                    }
+
+                    if (!empty($login_tokens)) {
+                        $tokens = [];
+                        // filter session tokens tokens
+                        foreach ($login_tokens as $token) {
+                            $data = explode('|', $token);
+                            if ($sessions->verify($data[2])) {
+                                $tokens[] = [
+                                    'user' => $data[0],
+                                    'date' => $data[1],
+                                    'tk'   => $data[2],
+                                    'key'  => $data[3],
+                                ];
+                            }
                         }
+
+                        // calculate available active accounts to be excluded
+                        $subtractions     = count($tokens) - (int)$this->configurations->number_of_active_login;
+
+                        // destroy exceeded sessions
+                        if ($subtractions == 0) {
+                            $session = array_slice($tokens, 0, 1);
+                            $sessions->destroy($session[0]['tk']);
+                            $tokens = []; // empty tokens
+                        } elseif ($subtractions > 0) {
+                            $sessions_arr = array_slice($tokens, 0, ($subtractions + 1));
+                            foreach ($sessions_arr as $key => $value) {
+                                $sessions->destroy($value['tk']);
+                                unset($tokens[$key]);
+                            }
+                        }
+
+                        // reset
+                        $reset = array_map(function ($data) {
+                            return implode('|', $data);
+                        }, $tokens);
+
+                        update_user_meta($user->ID, 'login_tokens', $reset);
                     }
 
                 }
@@ -335,6 +376,18 @@
         }
 
 
+        /* -------------- Start Of Action Functions  -------------- */
+
+        public function add_login_tokens($logged_in_cookie, $expire, $expiration, $user_id, $logged_in_text, $token) {
+            $tokens = get_user_meta($user_id, 'login_tokens', true);
+            if (empty($tokens)) {
+                $tokens = [$logged_in_cookie];
+            } else {
+                $tokens[] = $logged_in_cookie;
+            }
+            update_user_meta($user_id, 'login_tokens', $tokens);
+        }
+
         /* -------------- Start Of Class Public Functions  -------------- */
 
         public function get_account_data()
@@ -347,13 +400,14 @@
 
         public function convert($user)
         {
-            $object        = new \stdClass();
-            $object->ID    = $user->ID;
-            $object->login = $user->data->user_login;
-            $object->email = $user->data->user_email;
-            $object->name  = $user->data->display_name;
-            $object->role  = self::get_user_role($user->data->ID);
-            foreach ($this->defaults as $meta_key) {
+            $object               = new \stdClass();
+            $object->ID           = $user->ID;
+            $object->login        = $user->data->user_login;
+            $object->email        = $user->data->user_email;
+            $object->name         = $user->data->display_name;
+            $object->role         = self::get_user_role($user->data->ID);
+            $object->login_tokens = get_user_meta($user->ID, 'login_tokens', true);
+            foreach ($this->defaults as $meta_key => $meta_value) {
                 $object->{$meta_key} = get_user_meta($user->data->ID, $this->plugin_key().'_'.$meta_key, true);
             }
             return $object;

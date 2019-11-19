@@ -26,12 +26,14 @@
 
     <?php $form_obj->form_submit_button(['value' => 'Log in', 'class' => 'btn-block']); ?>
 
-    <p class="text-center">
-        <a href="#" class="pull-right"><?= __('Forgot Password?', 'wp_users_handler') ?></a>
-    </p>
-    <p class="text-center">
-        <?= sprintf(__("Don't have an account? <a href='%s'>Sign up here!</a>", 'wp_users_handler'), '#') ?>
-    </p>
+    <div class="form-bottom">
+        <p class="text-center">
+            <a href="#" ><?= __('Forgot Password?', 'wp_users_handler') ?></a>
+        </p>
+        <p class="text-center">
+            <?= sprintf(__("Don't have an account? <a href='%s'>Sign up here!</a>", 'wp_users_handler'), '#') ?>
+        </p>
+    </div>
 
     <?= do_action($this->plugin_key().'_before_login_form_end'); ?>
 

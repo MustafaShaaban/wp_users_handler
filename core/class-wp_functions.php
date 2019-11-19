@@ -22,6 +22,7 @@
         private $plugin_path;
         private $plugin_url;
         private $plugin_title;
+
         /**
          * The current version of the plugin.
          *
@@ -68,6 +69,7 @@
             $this->plugin_title  = WP_USERS_HANDLER_PLUGIN_TITLE;
             return $this->plugin_title;
         }
+
         /**
          * Retrieve the version number of the plugin.
          *

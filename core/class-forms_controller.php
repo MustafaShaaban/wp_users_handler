@@ -172,6 +172,8 @@
          * after         => ''
          * autocomplete  => default on
          * hint          => ''
+         * abbr          => ''
+         * order         => 0
          * extra_attr    => [
          *   'maxlength' => '50',
          *   'minlength' => '',
@@ -201,6 +203,8 @@
                 'after'         => '',
                 'autocomplete'  => 'on',
                 'hint'          => '',
+                'abbr'          => __("This field is required", "wp_users_handler"),
+                'order'         => 0,
                 'extra_attr'    => [
                     'maxlength' => '50',
                     'minlength' => '',
@@ -211,16 +215,16 @@
 
             $input_data = array_merge($defaults, $args);
 
-            $require = (!empty($input_data['required'])) ? '<abbr class="required" title="required">*</abbr>' : '';
+            $require = (!empty($input_data['required'])) ? '<abbr class="required" title="'.$input_data['abbr'].'">*</abbr>' : '';
             $value   = (empty($input_data['default_value']) && $input_data['default_value'] !== 0) ? $input_data['value'] : $input_data['default_value'];;
 
             ?>
             <div class="form-group pl-input-wrapper <?= $input_data['class'] ?>">
                 <?= $input_data['before'] ?>
-                <label for="<?= $input_data['id'] ?>"><?= $input_data['label'] ?></label>
+                <label for="<?= $input_data['id'] ?>" class="pl-label"><?= $input_data['label'] ?></label>
                 <?= $require ?>
                 <input type="<?= $input_data['type'] ?>"
-                       class="form-control pl-form-input"
+                       class="form-control pl-input"
                        id="<?= $input_data['id'] ?>"
                        name="<?= $input_data['name'] ?>"
                        value="<?= $value ?>"
@@ -259,6 +263,8 @@
          * autocomplete  => default on
          * rows          => '3'
          * hint          => ''
+         * abbr          => ''
+         * order         => 0
          * extra_attr    => []
          * ]
          *
@@ -281,16 +287,18 @@
                 'autocomplete' => 'on',
                 'rows'         => '3',
                 'hint'         => '',
+                'abbr'         => __("This field is required", "wp_users_handler"),
+                'order'        => 0,
                 'extra_attr'   => []
             ];
             $input_data = array_merge($defaults, $args);
-            $require    = (!empty($input_data['required'])) ? '<abbr class="required" title="required">*</abbr>' : '';
+            $require    = (!empty($input_data['required'])) ? '<abbr class="required" title="'.$input_data['abbr'].'">*</abbr>' : '';
             ?>
-            <div class="form-group pl-input-wrapper<?= $input_data['class'] ?>">
+            <div class="form-group pl-input-wrapper <?= $input_data['class'] ?>">
                 <?= $input_data['before'] ?>
-                <label for="<?= $input_data['id'] ?>"><?= $input_data['label'] ?></label>
+                <label for="<?= $input_data['id'] ?>" class="pl-label"><?= $input_data['label'] ?></label>
                 <?= $require ?>
-                <textarea class="form-control pl-form-input"
+                <textarea class="form-control pl-textarea"
                           id="<?= $input_data['id'] ?>"
                           name="<?= $input_data['name'] ?>"
                           placeholder="<?= $input_data['placeholder'] ?>"
@@ -323,6 +331,8 @@
          * hint         => ''
          * accept       => ''
          * multiple     => ''
+         * abbr          => ''
+         * order         => 0
          * extra_attr   => []
          * ]
          *
@@ -343,11 +353,13 @@
                 'hint'       => '',
                 'accept'     => '',
                 'multiple'   => '',
+                'abbr'       => __("This field is required", "wp_users_handler"),
+                'order'      => 0,
                 'extra_attr' => []
             ];
 
             $input_data = array_merge($defaults, $args);
-            $require    = (!empty($input_data['required'])) ? '<abbr class="required" title="required">*</abbr>' : '';
+            $require    = (!empty($input_data['required'])) ? '<abbr class="required" title="'.$input_data['abbr'].'">*</abbr>' : '';
 
             ?>
             <div class="form-group pl-input-wrapper<?= $input_data['class'] ?>">
@@ -356,7 +368,7 @@
                 <div class="custom-file">
                     <?= $input_data['before'] ?>
                     <input type="file"
-                           class="custom-file-input pl-form-input"
+                           class="custom-file-input pl-input"
                            id="<?= $input_data['id'] ?>"
                            name="<?= $input_data['name'] ?>"
                            aria-describedby="<?= $input_data['id']."_help" ?>"
@@ -395,6 +407,8 @@
          * before         => ''
          * after          => ''
          * multiple       => ''
+         * abbr          => ''
+         * order         => 0
          * extra_attr     => []
          *
          * @return false|string
@@ -416,17 +430,19 @@
                 'before'         => '',
                 'after'          => '',
                 'multiple'       => '',
+                'abbr'           => __("This field is required", "wp_users_handler"),
+                'order'          => 0,
                 'extra_attr'     => []
             ];
             $input_data = array_merge($defaults, $args);
-            $require    = (!empty($input_data['required'])) ? '<abbr class="required" title="required">*</abbr>' : '';
+            $require    = (!empty($input_data['required'])) ? '<abbr class="required" title="'.$input_data['abbr'].'">*</abbr>' : '';
 
             ?>
             <div class="form-group pl-input-wrapper <?= $input_data['class'] ?>">
                 <?= $input_data['before'] ?>
-                <label for="<?= $input_data['id'] ?>"><?= $input_data['label'] ?></label>
+                <label for="<?= $input_data['id'] ?>" class="pl-label"><?= $input_data['label'] ?></label>
                 <?= $require ?>
-                <select class="form-control pl-form-input" id="<?= $input_data['id'] ?>" name="<?= $input_data['name'] ?>" <?= $this->create_attr($input_data) ?> <?= $input_data['required'] ?>>
+                <select class="form-control pl-input" id="<?= $input_data['id'] ?>" name="<?= $input_data['name'] ?>" <?= $this->create_attr($input_data) ?> <?= $input_data['required'] ?>>
                     <?php
                         if (empty($input_data['default_option']) && empty($input_data['select_option'])) {
                             ?>
@@ -460,9 +476,12 @@
          *      before'     => ''
          *      after'      => ''
          *      checked'    => ''
+         *      abbr          => ''
+         *      order         => 0
          *      extra_attr' => []
          *  )
          * )
+         * order         => 0
          * ]
          *
          * @return false|string
@@ -483,15 +502,18 @@
                         'before'     => '',
                         'after'      => '',
                         'checked'    => '',
+                        'abbr'       => __("This field is required", "wp_users_handler"),
+                        'order'      => 0,
                         'extra_attr' => []
                     ]
-                ]
+                ],
+                'order'   => 0,
             ];
             $input_data = array_merge($defaults, $args);
-            $require    = (!empty($input_data['required'])) ? '<abbr class="required" title="required">*</abbr>' : '';
 
             $count = 0;
             foreach ($input_data['choices'] as $name) {
+                $require = (!empty($input_data['required'])) ? '<abbr class="required" title="'.$name['abbr'].'">*</abbr>' : '';
                 if (empty($name['id'])) {
                     $id = (empty($name['name'])) ? "" : $this->plugin_key().'_'.str_replace('[]', '', $name['name']).$count;
                     $count++;
@@ -503,11 +525,11 @@
                     <?= $name['before'] ?>
                     <?= $require ?>
                     <input type="<?= $input_data['type'] ?>"
-                           class="form-control pl-form-input"
+                           class="form-control pl-checkbox"
                            id="<?= $id ?>"
                            name="<?= $name['name'] ?>"
                            value="<?= $name['value'] ?>" <?= $name['required'] ?> <?= $this->create_attr($name['choices']) ?> <?= $name['checked'] ?>>
-                    <label for="<?= $id ?>"><?= $name['label'] ?></label>
+                    <label for="<?= $id ?>" class="pl-label"><?= $name['label'] ?></label>
                     <?= $name['after'] ?>
                 </div>
                 <?php
@@ -532,9 +554,12 @@
          *      before'     => ''
          *      after'      => ''
          *      checked'    => ''
+         *      abbr          => ''
+         *      order         => 0
          *      extra_attr' => []
          *  )
          * )
+         * order         => 0
          * ]
          *
          * @return false|string
@@ -555,15 +580,18 @@
                         'before'     => '',
                         'after'      => '',
                         'checked'    => '',
+                        'abbr'       => __("This field is required", "wp_users_handler"),
+                        'order'      => 0,
                         'extra_attr' => []
                     ]
-                ]
+                ],
+                'order'   => 0,
             ];
             $input_data = array_merge($defaults, $args);
-            $require    = (!empty($input_data['required'])) ? '<abbr class="required" title="required">*</abbr>' : '';
 
             $count = 0;
             foreach ($input_data['choices'] as $name) {
+                $require = (!empty($input_data['required'])) ? '<abbr class="required" title="'.$name['abbr'].'">*</abbr>' : '';
                 if (empty($name['id'])) {
                     $id = (empty($name['name'])) ? "" : $this->plugin_key().'_'.str_replace('[]', '', $name['name']).$count;
                     $count++;
@@ -575,11 +603,11 @@
                     <?= $name['before'] ?>
                     <?= $require ?>
                     <input type="<?= $input_data['type'] ?>"
-                           class="form-control pl-form-input"
+                           class="form-control pl-radio"
                            id="<?= $id ?>"
                            name="<?= $input_data['name'] ?>"
                            value="<?= $name['value'] ?>" <?= $name['required'] ?> <?= $this->create_attr($name['choices']) ?> <?= $name['checked'] ?>>
-                    <label for="<?= $id ?>"><?= $name['label'] ?></label>
+                    <label for="<?= $id ?>" class="pl-label"><?= $name['label'] ?></label>
                     <?= $name['after'] ?>
                 </div>
                 <?php
@@ -601,6 +629,8 @@
          * before'     => ''
          * after'      => ''
          * checked'    => ''
+         * abbr          => ''
+         * order         => 0
          * extra_attr' => []
          * ]
          *
@@ -619,10 +649,12 @@
                 'before'     => '',
                 'after'      => '',
                 'checked'    => '',
+                'abbr'       => __("This field is required", "wp_users_handler"),
+                'order'      => 0,
                 'extra_attr' => []
             ];
             $input_data = array_merge($defaults, $args);
-            $require    = (!empty($input_data['required'])) ? '<abbr class="required" title="required">*</abbr>' : '';
+            $require    = (!empty($input_data['required'])) ? '<abbr class="required" title="'.$input_data['abbr'].'">*</abbr>' : '';
 
             ?>
 
@@ -630,7 +662,7 @@
                 <?= $input_data['before'] ?>
                 <?= $require ?>
                 <input type="checkbox"
-                       class="custom-control-input pl-form-input pl-switch <?= $this->plugin_key().'-'.$input_data['class'] ?>"
+                       class="custom-control-input pl-input pl-switch <?= $this->plugin_key().'-'.$input_data['class'] ?>"
                        id="<?= $input_data['id'] ?>"
                        name="<?= $input_data['name'] ?>"
                     <?= $input_data['required'] ?> <?= $this->create_attr($input_data) ?> <?= $input_data['checked'] ?>>
@@ -704,6 +736,7 @@
 
         /**
          * This functions responsible for sort inputs
+         *
          * @param $settings
          *
          * @return mixed
