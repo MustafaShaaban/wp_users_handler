@@ -121,9 +121,9 @@
             $this->plugin_path = $plugin_path;
             $this->plugin_url  = $plugin_url;
             $this->plugin_key  = $plugin_key;
-            $this->css         = $this->plugin_url.'admin/css/';
-            $this->js          = $this->plugin_url.'admin/js/';
-            $this->img         = $this->plugin_url.'admin/img/';
+            $this->css         = $this->plugin_url.'admin/assets/css/';
+            $this->js          = $this->plugin_url.'admin/assets/js/';
+            $this->img         = $this->plugin_url.'admin/assets/img/';
 
             $this->require_files();
         }
@@ -157,9 +157,8 @@
              * class.
              */
             if (isset($_GET['page']) && $_GET['page'] === $this->plugin_key.'-main-page') {
-                wp_enqueue_style($this->plugin_name.'-bootstrap', $this->css.'bootstrap.min.css', array(), $this->version, 'all');
-                wp_enqueue_style($this->plugin_name.'-loading', $this->css.'pl-loading.css', array(), $this->version, 'all');
-                wp_enqueue_style($this->plugin_name, $this->css.'wp_users_handler-admin.css', array(), $this->version, 'all');
+                wp_enqueue_style($this->plugin_name.'-lib-bootstrap', $this->css.'lib/bootstrap.min.css', array(), $this->version, 'all');
+                wp_enqueue_style($this->plugin_name, $this->css.'main.min.css', array(), $this->version, 'all');
             }
 
         }
@@ -185,13 +184,13 @@
              */
 
             if (isset($_GET['page']) && $_GET['page'] === $this->plugin_key.'-main-page') {
-                wp_enqueue_script($this->plugin_name.'-bootstrap', $this->js.'bootstrap.min.js', array('jquery'), $this->version, false);
+                wp_enqueue_script($this->plugin_name.'-lib-bootstrap', $this->js.'lib/bootstrap.min.js', array('jquery'), $this->version, false);
+                wp_enqueue_script($this->plugin_name, $this->js.'main.min.js', array('jquery'), $this->version, false);
+                wp_localize_script($this->plugin_name, 'pl_globals', array(
+                    'ajaxUrl'    => admin_url('admin-ajax.php'),
+                    'plugin_key' => $this->plugin_key
+                ));
             }
-            wp_enqueue_script($this->plugin_name, $this->js.'wp_users_handler-admin.js', array('jquery'), $this->version, false);
-            wp_localize_script($this->plugin_name, 'pl_globals', array(
-                'ajaxUrl'    => admin_url('admin-ajax.php'),
-                'plugin_key' => $this->plugin_key
-            ));
         }
 
     }

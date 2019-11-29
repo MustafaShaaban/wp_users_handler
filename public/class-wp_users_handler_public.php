@@ -107,9 +107,9 @@
             $this->plugin_path = $plugin_path;
             $this->plugin_url  = $plugin_url;
             $this->plugin_key  = $plugin_key;
-            $this->css         = $this->plugin_url.'public/css/';
-            $this->js          = $this->plugin_url.'public/js/';
-            $this->img         = $this->plugin_url.'public/img/';
+            $this->css         = $this->plugin_url.'public/assets/css/';
+            $this->js          = $this->plugin_url.'public/assets/js/';
+            $this->img         = $this->plugin_url.'public/assets/img/';
 
             $this->require_files();
 
@@ -144,9 +144,8 @@
              * class.
              */
 
-            wp_enqueue_style($this->plugin_name.'-bootstrap', $this->css.'bootstrap.min.css', array(), $this->version, 'all');
-            wp_enqueue_style($this->plugin_name.'-loading', $this->css.'pl-loading.css', array(), $this->version, 'all');
-            wp_enqueue_style($this->plugin_name, $this->css.'wp_users_handler-public.css', array(), $this->version, 'all');
+            wp_enqueue_style($this->plugin_name.'-lib-bootstrap', $this->css.'lib/bootstrap.min.css', array(), $this->version, 'all');
+            wp_enqueue_style($this->plugin_name, $this->css.'main.min.css', array(), $this->version, 'all');
         }
 
         /**
@@ -169,11 +168,11 @@
              * class.
              */
 
-            wp_enqueue_script($this->plugin_name.'-validation', $this->js.'jquery.validate.min.js', array('jquery'), $this->version, true);
-            wp_enqueue_script($this->plugin_name.'-validation-methods', $this->js.'additional-methods.min.js', array('jquery', 'validation'), $this->version, true);
-            wp_enqueue_script($this->plugin_name.'-functions', $this->js.'pl-functions.js', array('jquery'), $this->version, true);
-            wp_enqueue_script($this->plugin_name.'-bootstrap', $this->js.'bootstrap.min.js', array('jquery'), $this->version, true);
-            wp_enqueue_script($this->plugin_name, $this->js.'wp_users_handler-public.js', array('jquery'), $this->version, true);
+            wp_enqueue_script($this->plugin_name.'-lib-bootstrap', $this->js.'lib/bootstrap.min.js', array('jquery'), $this->version, true);
+            wp_enqueue_script($this->plugin_name.'-lib-validation', $this->js.'lib/jquery.validate.min.js', array('jquery'), $this->version, true);
+            wp_enqueue_script($this->plugin_name.'-lib-validation-methods', $this->js.'lib/additional-methods.min.js', array('jquery', 'validation'), $this->version, true);
+            wp_enqueue_script($this->plugin_name, $this->js.'main.min.js', array('jquery'), $this->version, true);
+
             wp_localize_script($this->plugin_name, 'pl_globals', array(
                 'pl_key'  => $this->plugin_key,
                 'ajaxUrl' => admin_url('admin-ajax.php')

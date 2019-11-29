@@ -94,25 +94,25 @@
             /**
              * The class responsible for global functions
              */
-            require_once WP_USERS_HANDLER_PLUGIN_PATH.'core/class-wp_functions.php';
+            require_once WP_USERS_HANDLER_PLUGIN_PATH.'includes/class-wp_functions.php';
 
             /**
              * The class responsible for defining all code necessary
              * to run during the plugin's activation.
              */
-            require_once WP_USERS_HANDLER_PLUGIN_PATH.'core/class-wp_users_handler_activator.php';
+            require_once WP_USERS_HANDLER_PLUGIN_PATH.'includes/core/class-wp_users_handler_activator.php';
 
             /**
              * The class responsible for defining all code necessary
              * to run during the plugin's deactivation.
              */
-            require_once WP_USERS_HANDLER_PLUGIN_PATH.'core/class-wp_users_handler_deactivator.php';
+            require_once WP_USERS_HANDLER_PLUGIN_PATH.'includes/core/class-wp_users_handler_deactivator.php';
 
             /**
              * The core plugin class that is used to define internationalization,
              * admin-specific hooks, and public-facing site hooks.
              */
-            require WP_USERS_HANDLER_PLUGIN_PATH.'core/class-wp_users_handler.php';
+            require WP_USERS_HANDLER_PLUGIN_PATH.'includes/core/class-wp_users_handler.php';
         }
 
         /**
