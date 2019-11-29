@@ -13,6 +13,7 @@ const watch         = require('gulp-watch');
 const image         = require('gulp-image');
 const concat        = require('gulp-concat');
 const gulpif        = require('gulp-if');
+const notify        = require("gulp-notify");
 
 /* ================ admin assets ================ */
 /* Styles path */
@@ -166,12 +167,12 @@ gulp.task('lib', function (cb) {
 });
 
 gulp.task('watch', function () {
-    watch([admin_styleWatch], gulp.parallel('adminStyles'));
-    watch([public_styleWatch], gulp.parallel('publicStyles'));
-    watch([admin_scriptWatch], gulp.parallel('adminScripts'));
-    watch([public_scriptWatch], gulp.parallel('publicScripts'));
-    watch([admin_imgSrc], gulp.parallel('adminImages'));
-    watch([public_imgSrc], gulp.parallel('publicImages'));
+    watch([admin_styleWatch], gulp.series('adminStyles'));
+    watch([public_styleWatch], gulp.series('publicStyles'));
+    watch([admin_scriptWatch], gulp.series('adminScripts'));
+    watch([public_scriptWatch], gulp.series('publicScripts'));
+    watch([admin_imgSrc], gulp.series('adminImages'));
+    watch([public_imgSrc], gulp.series('publicImages'));
 });
 
 gulp.task('default', gulp.parallel('adminStyles', 'publicStyles', 'adminScripts', 'publicScripts', 'adminImages', 'publicImages', 'lib', 'watch'));
