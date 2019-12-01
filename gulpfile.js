@@ -26,7 +26,7 @@ const admin_styleWatch      = './src/admin/scss/**/*.scss';
 /* Scripts path */
 const admin_scriptSrc       = 'src/admin/js/';
 const admin_scriptLibSrc    = 'src/admin/js/lib/*';
-const admin_scriptFiles     = ['all.js'];
+const admin_scriptFiles     = ['wp_users_handler-admin.js'];
 const admin_scriptDist      = 'admin/assets/js';
 const admin_scriptLibDist   = 'admin/assets/js/lib';
 const admin_scriptWatch     = './src/admin/js/**/*.js';
@@ -87,12 +87,6 @@ gulp.task('publicStyles', function (cb) {
 });
 
 gulp.task('adminScripts', function (cb) {
-    gulp.src(admin_concat)
-        .pipe(sourcemaps.init())
-        .pipe(concat('all.js'))
-        .pipe(sourcemaps.write())
-        .pipe(gulp.dest(admin_scriptSrc));
-
     admin_scriptFiles.map(function (entry) {
         return browserify({
             entries: [admin_scriptSrc + entry]
@@ -100,9 +94,9 @@ gulp.task('adminScripts', function (cb) {
             .transform(babelify, {presets: ["@babel/preset-env"]})
             .bundle()
             .pipe(source(entry))
-            .pipe(gulpif(entry === 'all.js', rename({basename: "main", suffix: ".min"}), rename({suffix: ".min"})))
+            .pipe(rename({basename: "main", suffix: ".min"}))
             .pipe(buffer())
-            .pipe(sourcemaps.init({loadMaps: true}))
+            .pipe(sourcemaps.init())
             .pipe(uglify())
             .pipe(sourcemaps.write('./'))
             .pipe(gulp.dest(admin_scriptDist));
@@ -111,12 +105,6 @@ gulp.task('adminScripts', function (cb) {
 });
 
 gulp.task('publicScripts', function (cb) {
-    gulp.src(public_concat)
-        .pipe(sourcemaps.init())
-        .pipe(concat('all.js'))
-        .pipe(sourcemaps.write())
-        .pipe(gulp.dest(public_scriptSrc));
-
     public_scriptFiles.map(function (entry) {
         return browserify({
             entries: [public_scriptSrc + entry]
@@ -124,7 +112,7 @@ gulp.task('publicScripts', function (cb) {
             .transform(babelify, {presets: ["@babel/preset-env"]})
             .bundle()
             .pipe(source(entry))
-            .pipe(gulpif(entry === 'all.js', rename({basename: "main", suffix: ".min"}), rename({suffix: ".min"})))
+            .pipe(rename({basename: "main", suffix: ".min"}))
             .pipe(buffer())
             .pipe(sourcemaps.init({loadMaps: true}))
             .pipe(uglify())

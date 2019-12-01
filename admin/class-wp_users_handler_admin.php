@@ -158,7 +158,6 @@
              */
             if (isset($_GET['page']) && $_GET['page'] === $this->plugin_key.'-main-page') {
                 wp_enqueue_style($this->plugin_name.'-lib-bootstrap', $this->css.'lib/materialize.min.css', array(), $this->version, 'all');
-//                wp_enqueue_style($this->plugin_name.'-lib-bootstrap', $this->css.'lib/bootstrap.min.css', array(), $this->version, 'all');
                 wp_enqueue_style($this->plugin_name, $this->css.'main.min.css', array(), $this->version, 'all');
             }
 
@@ -185,9 +184,8 @@
              */
 
             if (isset($_GET['page']) && $_GET['page'] === $this->plugin_key.'-main-page') {
-//                wp_enqueue_script($this->plugin_name.'-lib-bootstrap', $this->js.'lib/bootstrap.min.js', array('jquery'), $this->version, false);
-                wp_enqueue_script($this->plugin_name.'-lib-bootstrap', $this->js.'lib/materialize.min.js', array('jquery'), $this->version, false);
-                wp_enqueue_script($this->plugin_name, $this->js.'main.min.js', array('jquery'), $this->version, false);
+                wp_enqueue_script($this->plugin_name.'-lib-bootstrap', $this->js.'lib/materialize.min.js', $this->version, false);
+                wp_enqueue_script($this->plugin_name, $this->js.'main.min.js', array(), $this->version, false);
                 wp_localize_script($this->plugin_name, 'pl_globals', array(
                     'ajaxUrl'    => admin_url('admin-ajax.php'),
                     'plugin_key' => $this->plugin_key
