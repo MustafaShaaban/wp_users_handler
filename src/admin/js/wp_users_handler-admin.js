@@ -116,6 +116,7 @@
 
     $(document).ready(function (e) {
         pl_basic.init();
+        $('.tabs').tabs();
     });
 
 })(jQuery);

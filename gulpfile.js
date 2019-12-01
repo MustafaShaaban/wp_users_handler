@@ -171,8 +171,8 @@ gulp.task('watch', function () {
     watch([public_styleWatch], gulp.series('publicStyles'));
     watch([admin_scriptWatch], gulp.series('adminScripts'));
     watch([public_scriptWatch], gulp.series('publicScripts'));
-    watch([admin_imgSrc], gulp.series('adminImages'));
-    watch([public_imgSrc], gulp.series('publicImages'));
+    // watch([admin_imgSrc], gulp.series('adminImages'));
+    // watch([public_imgSrc], gulp.series('publicImages'));
 });
 
 gulp.task('default', gulp.parallel('adminStyles', 'publicStyles', 'adminScripts', 'publicScripts', 'adminImages', 'publicImages', 'lib', 'watch'));
