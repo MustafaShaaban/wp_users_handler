@@ -32,7 +32,7 @@
     use UH\HANDLER\Wp_users_handler;
 
     // If this file is called directly, abort.
-    if (!defined('WPINC')) {
+    if (!defined('WPINC') && !defined('ABSPATH')) {
         die;
     }
 
