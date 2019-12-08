@@ -59,7 +59,7 @@
                     'required'     => 'required',
                     'placeholder'  => __('Email or username', 'wp_users_handler'),
                     'autocomplete' => 'off',
-                    'hint'         => __('You can login by your username or password', 'wp_users_handler'),
+                    'hint'         => __('You can login by your username or email', 'wp_users_handler'),
                     'order'        => 5
                 ],
                 'user_password' => [

@@ -50,7 +50,7 @@ const public_styleWatch     = './src/public/scss/**/*.scss';
 /* Scripts path */
 const public_scriptSrc      = 'src/public/js/';
 const public_scriptLibSrc   = 'src/public/js/lib/*';
-const public_scriptFiles    = ['all.js'];
+const public_scriptFiles    = ['wp_users_handler-public.js'];
 const public_scriptDist     = 'public/assets/js';
 const public_scriptLibDist  = 'public/assets/js/lib';
 const public_scriptWatch    = './src/public/js/**/*.js';

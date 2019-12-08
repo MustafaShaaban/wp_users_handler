@@ -5,7 +5,6 @@ class Config {
 
     constructor() {
         this.ajaxRequests = {};
-        console.log(this);
     }
 
     configAjax(el, option_name, option_value) {

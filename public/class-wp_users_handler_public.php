@@ -144,7 +144,6 @@
              * class.
              */
 
-            wp_enqueue_style($this->plugin_name.'-lib-bootstrap', $this->css.'lib/bootstrap.min.css', array(), $this->version, 'all');
             wp_enqueue_style($this->plugin_name, $this->css.'main.min.css', array(), $this->version, 'all');
         }
 
@@ -168,27 +167,23 @@
              * class.
              */
 
-            wp_enqueue_script($this->plugin_name.'-lib-bootstrap', $this->js.'lib/bootstrap.min.js', array('jquery'), $this->version, true);
-            wp_enqueue_script($this->plugin_name.'-lib-validation', $this->js.'lib/jquery.validate.min.js', array('jquery'), $this->version, true);
-            wp_enqueue_script($this->plugin_name.'-lib-validation-methods', $this->js.'lib/additional-methods.min.js', array('jquery', 'validation'), $this->version, true);
-            wp_enqueue_script($this->plugin_name, $this->js.'main.min.js', array('jquery'), $this->version, true);
-
+            wp_enqueue_script($this->plugin_name, $this->js.'main.min.js', NULL, $this->version, true);
             wp_localize_script($this->plugin_name, 'pl_globals', array(
                 'pl_key'  => $this->plugin_key,
-                'ajaxUrl' => admin_url('admin-ajax.php')
-            ));
-            wp_localize_script($this->plugin_name, 'pl_phrases', array(
-                'default'     => __("This field is required.", "wp_users_handler"),
-                'email'       => __("Please enter a valid email address.", "wp_users_handler"),
-                'number'      => __("Please enter a valid number.", "wp_users_handler"),
-                'equalTo'     => __("Please enter the same value again.", "wp_users_handler"),
-                'maxlength'   => __("Please enter no more than {0} characters.", "wp_users_handler"),
-                'minLength'   => __("Please enter at least {0} characters.", "wp_users_handler"),
-                'max'         => __("Please enter a value less than or equal to {0}.", "wp_users_handler"),
-                'min'         => __("Please enter a value greater than or equal to {0}.", "wp_users_handler"),
-                'pass_regex'  => __("Password doesn't complexity.", "wp_users_handler"),
-                'phone_regex' => __("Please enter a valid Phone number.", "wp_users_handler"),
-                'email_regex' => __("Please enter a valid email address.", "wp_users_handler"),
+                'ajaxUrl' => admin_url('admin-ajax.php'),
+                'pl_phrases' => array(
+	                'default'     => __("This field is required.", "wp_users_handler"),
+	                'email'       => __("Please enter a valid email address.", "wp_users_handler"),
+	                'number'      => __("Please enter a valid number.", "wp_users_handler"),
+	                'equalTo'     => __("Please enter the same value again.", "wp_users_handler"),
+	                'maxlength'   => __("Please enter no more than {0} characters.", "wp_users_handler"),
+	                'minLength'   => __("Please enter at least {0} characters.", "wp_users_handler"),
+	                'max'         => __("Please enter a value less than or equal to {0}.", "wp_users_handler"),
+	                'min'         => __("Please enter a value greater than or equal to {0}.", "wp_users_handler"),
+	                'pass_regex'  => __("Password doesn't complexity.", "wp_users_handler"),
+	                'phone_regex' => __("Please enter a valid Phone number.", "wp_users_handler"),
+	                'email_regex' => __("Please enter a valid email address.", "wp_users_handler"),
+                )
             ));
         }
 
