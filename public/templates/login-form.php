@@ -10,7 +10,7 @@
     $form_obj = Forms_controller::get_instance();
 ?>
 
-<div class="pl-login-form">
+<div class="<?= $this->plugin_key() ?>-login-form">
 
     <?= do_action($this->plugin_key().'_before_login_form_start'); ?>
 
