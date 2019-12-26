@@ -1,0 +1,10 @@
+@import "../../../node_modules/materialize-css/sass/materialize";
+@import 'globals';
+@import "pl-loading";
+
+.tabs .indicator {
+    margin-bottom: 0;
+}
+.tabs .tab a:focus, .tabs .tab a:focus.active {
+    box-shadow: none;
+}
