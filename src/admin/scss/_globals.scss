@@ -1,0 +1,158 @@
+.container-fluid {
+  padding: 0 15px;
+}
+
+#wpbody-content {
+  padding-bottom: 0px;
+}
+
+#wpcontent {
+  padding-left: 0;
+}
+
+.uh-main-page {
+  background-image: url(../img/main-background.png);
+  min-height: 100vh;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+.uh-main-page .overlay {
+  min-height: 100vh;
+  background-color: rgba(163, 196, 216, 0.13);
+  padding-bottom: 65px;
+}
+
+.uh-main-page .pl-page-body {
+  padding: 20px;
+}
+
+
+/* Color Theme Swatches in Hex */
+$Iterable-Website-and-Branding-1-hex: #044BD9;
+$Iterable-Website-and-Branding-2-hex: #0583F2;
+$Iterable-Website-and-Branding-3-hex: #D0E2F2;
+$Iterable-Website-and-Branding-4-hex: #0597F2;
+$Iterable-Website-and-Branding-5-hex: #29A5F2;
+
+/* Color Theme Swatches in RGBA */
+$Iterable-Website-and-Branding-1-rgba: rgba(4,75,216, 1);
+$Iterable-Website-and-Branding-2-rgba: rgba(4,131,242, 1);
+$Iterable-Website-and-Branding-3-rgba: rgba(208,226,242, 1);
+$Iterable-Website-and-Branding-4-rgba: rgba(4,151,242, 1);
+$Iterable-Website-and-Branding-5-rgba: rgba(41,165,242, 1);
+
+
+
+
+
+
+/* Color Theme Swatches in Hex */
+$Todd-Website-2-1-hex: #008BE5;
+$Todd-Website-2-2-hex: #FFFFFF;
+$Todd-Website-2-3-hex: #BEBEBE;
+$Todd-Website-2-4-hex: #828282;
+$Todd-Website-2-5-hex: #000000;
+
+/* Color Theme Swatches in RGBA */
+$Todd-Website-2-1-rgba: rgba(0,138,228, 1);
+$Todd-Website-2-2-rgba: rgba(255,255,255, 1);
+$Todd-Website-2-3-rgba: rgba(189,189,189, 1);
+$Todd-Website-2-4-rgba: rgba(130,130,130, 1);
+$Todd-Website-2-5-rgba: rgba(0,0,0, 1);
+
+
+
+
+
+
+
+
+/* Color Theme Swatches in Hex */
+$Waka-Waka-Collection-N01-1-hex: #BFBFBF;
+$Waka-Waka-Collection-N01-2-hex: #8C8C8C;
+$Waka-Waka-Collection-N01-3-hex: #595959;
+$Waka-Waka-Collection-N01-4-hex: #404040;
+$Waka-Waka-Collection-N01-5-hex: #262626;
+
+/* Color Theme Swatches in RGBA */
+$Waka-Waka-Collection-N01-1-rgba: rgba(191,191,191, 1);
+$Waka-Waka-Collection-N01-2-rgba: rgba(140,140,140, 1);
+$Waka-Waka-Collection-N01-3-rgba: rgba(89,89,89, 1);
+$Waka-Waka-Collection-N01-4-rgba: rgba(63,63,63, 1);
+$Waka-Waka-Collection-N01-5-rgba: rgba(38,38,38, 1);
+
+
+
+
+
+
+/* Color Theme Swatches in Hex */
+$Hans-Ulrich-Obrist-1-hex: #034C8C;
+$Hans-Ulrich-Obrist-2-hex: #6394BF;
+$Hans-Ulrich-Obrist-3-hex: #BFBFBD;
+$Hans-Ulrich-Obrist-4-hex: #F2F2F2;
+$Hans-Ulrich-Obrist-5-hex: #262626;
+
+/* Color Theme Swatches in RGBA */
+$Hans-Ulrich-Obrist-1-rgba: rgba(2,76,140, 1);
+$Hans-Ulrich-Obrist-2-rgba: rgba(99,148,191, 1);
+$Hans-Ulrich-Obrist-3-rgba: rgba(191,190,189, 1);
+$Hans-Ulrich-Obrist-4-rgba: rgba(242,242,242, 1);
+$Hans-Ulrich-Obrist-5-rgba: rgba(38,38,38, 1);
+
+
+
+
+
+
+
+/* Notices Error*/
+/* Color Theme Swatches in Hex */
+$Notice-Me-Pink-1-hex: #B23B3B;
+$Notice-Me-Pink-2-hex: #722626;
+$Notice-Me-Pink-3-hex: #F25151;
+$Notice-Me-Pink-4-hex: #FF5555;
+$Notice-Me-Pink-5-hex: #D84848;
+
+/* Color Theme Swatches in RGBA */
+$Notice-Me-Pink-1-rgba: rgba(177,59,59, 1);
+$Notice-Me-Pink-2-rgba: rgba(114,38,38, 1);
+$Notice-Me-Pink-3-rgba: rgba(242,80,80, 1);
+$Notice-Me-Pink-4-rgba: rgba(255,84,84, 1);
+$Notice-Me-Pink-5-rgba: rgba(216,72,72, 1);
+
+
+
+
+/* Success */
+/* Color Theme Swatches in Hex */
+$leaves-of-Spathiphyllum-cannifolium: #3391A6;
+$leaves-of-Spathiphyllum-cannifolium: #25594A;
+$leaves-of-Spathiphyllum-cannifolium: #3FA663;
+$leaves-of-Spathiphyllum-cannifolium: #2D7345;
+$leaves-of-Spathiphyllum-cannifolium: #262626;
+
+/* Color Theme Swatches in RGBA */
+$leaves-of-Spathiphyllum-cannifolium: rgba(51,145,166, 1);
+$leaves-of-Spathiphyllum-cannifolium: rgba(37,89,74, 1);
+$leaves-of-Spathiphyllum-cannifolium: rgba(63,166,99, 1);
+$leaves-of-Spathiphyllum-cannifolium: rgba(45,115,69, 1);
+$leaves-of-Spathiphyllum-cannifolium: rgba(38,38,38, 1);
+
+
+
+/* Color Theme Swatches in Hex */
+$Yellow-paper-memo-notes-decorated-christmas-tree: #F2CD13;
+$Yellow-paper-memo-notes-decorated-christmas-tree: #F2BB13;
+$Yellow-paper-memo-notes-decorated-christmas-tree: #F2D98D;
+$Yellow-paper-memo-notes-decorated-christmas-tree: #F2E3B6;
+$Yellow-paper-memo-notes-decorated-christmas-tree: #D91604;
+
+/* Color Theme Swatches in RGBA */
+$Yellow-paper-memo-notes-decorated-christmas-tree: rgba(242,205,19, 1);
+$Yellow-paper-memo-notes-decorated-christmas-tree: rgba(242,187,19, 1);
+$Yellow-paper-memo-notes-decorated-christmas-tree: rgba(242,217,141, 1);
+$Yellow-paper-memo-notes-decorated-christmas-tree: rgba(242,227,182, 1);
+$Yellow-paper-memo-notes-decorated-christmas-tree: rgba(217,22,4, 1);
