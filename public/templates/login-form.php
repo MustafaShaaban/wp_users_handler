@@ -2,7 +2,7 @@
 
 
     if (is_user_logged_in()) {
-        return;
+	    $this->page_404();
     }
 
     use UH\FORMS\Forms_controller;
@@ -10,7 +10,7 @@
     $form_obj = Forms_controller::get_instance();
 ?>
 
-<div class="pl-login-form">
+<div class="<?= $this->plugin_key() ?>-login-form">
 
     <?= do_action($this->plugin_key().'_before_login_form_start'); ?>
 
@@ -28,10 +28,10 @@
 
     <div class="form-bottom">
         <p class="text-center">
-            <a href="#" ><?= __('Forgot Password?', 'wp_users_handler') ?></a>
+            <a href="<?= $this->get_page_url('uh-account/forgot-password') ?>" ><?= __('Forgot Password?', 'wp_users_handler') ?></a>
         </p>
         <p class="text-center">
-            <?= sprintf(__("Don't have an account? <a href='%s'>Sign up here!</a>", 'wp_users_handler'), '#') ?>
+            <?= sprintf(__("Don't have an account? <a href='%s'>Sign up here!</a>", 'wp_users_handler'), $this->get_page_url('uh-account/register') ) ?>
         </p>
     </div>
 

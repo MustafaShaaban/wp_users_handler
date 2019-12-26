@@ -21,6 +21,8 @@
 
         private $login_form;
 
+        private $register_form;
+
         public static $instance;
 
         /**
@@ -33,7 +35,7 @@
         {
             self::$instance   = $this;
 
-            add_shortcode($this->plugin_key().'_login_form', array($this, 'create_login_form'));
+	        add_shortcode($this->plugin_key().'_login_form', array($this, 'create_login_form'));
             add_shortcode($this->plugin_key().'_registration_form', array($this, 'create_registration_form'));
             add_shortcode($this->plugin_key().'_rp_step1_form', array($this, 'create_rp_step1_form'));
             add_shortcode($this->plugin_key().'_rp_step2_form', array($this, 'create_rp_step2_form'));
@@ -54,12 +56,12 @@
             $this->login_form = [
                 'user_login'    => [
                     'type'         => 'text',
-                    'label'        => __('Email or username', 'wp_users_handler'),
+                    'label'        => __('E-mail or username', 'wp_users_handler'),
                     'name'         => 'user_login',
                     'required'     => 'required',
-                    'placeholder'  => __('Email or username', 'wp_users_handler'),
+                    'placeholder'  => __('E-mail or username', 'wp_users_handler'),
                     'autocomplete' => 'off',
-                    'hint'         => __('You can login by your username or password', 'wp_users_handler'),
+                    'hint'         => __('You can login by your username or email', 'wp_users_handler'),
                     'order'        => 5
                 ],
                 'user_password' => [
@@ -92,7 +94,66 @@
 
         public function create_registration_form()
         {
+	        $this->register_form = [
+		        'first_name'    => [
+			        'type'         => 'text',
+			        'label'        => __('First Name', 'wp_users_handler'),
+			        'name'         => 'first_name',
+			        'required'     => 'required',
+			        'placeholder'  => __('First Name', 'wp_users_handler'),
+			        'autocomplete' => 'off',
+			        'order'        => 5
+		        ],
+		        'last_name'    => [
+			        'type'         => 'text',
+			        'label'        => __('Last Name', 'wp_users_handler'),
+			        'name'         => 'last_name',
+			        'required'     => 'required',
+			        'placeholder'  => __('Last Name', 'wp_users_handler'),
+			        'autocomplete' => 'off',
+			        'order'        => 10
+		        ],
+		        'user_password' => [
+			        'type'         => 'password',
+			        'label'        => __('Password', 'wp_users_handler'),
+			        'name'         => 'user_password',
+			        'required'     => 'required',
+			        'placeholder'  => __('Password', 'wp_users_handler'),
+			        'autocomplete' => 'off',
+			        'order'        => 15
+		        ],
+		        'user_password_confirm' => [
+			        'type'         => 'password',
+			        'label'        => __('Confirm Password', 'wp_users_handler'),
+			        'name'         => 'user_password_confirm',
+			        'required'     => 'required',
+			        'placeholder'  => __('Confirm Password', 'wp_users_handler'),
+			        'autocomplete' => 'off',
+			        'order'        => 20
+		        ],
+		        'user_email'    => [
+			        'type'         => 'email',
+			        'label'        => __('E-mail Address', 'wp_users_handler'),
+			        'name'         => 'user_email',
+			        'required'     => 'required',
+			        'placeholder'  => __('E-mail Address', 'wp_users_handler'),
+			        'autocomplete' => 'off',
+			        'order'        => 25
+		        ],
+		        'user_email_confirm'    => [
+			        'type'         => 'email',
+			        'label'        => __('Confirm E-mail Address', 'wp_users_handler'),
+			        'name'         => 'user_email_confirm',
+			        'required'     => 'required',
+			        'placeholder'  => __('Confirm E-mail Address', 'wp_users_handler'),
+			        'autocomplete' => 'off',
+			        'order'        => 30
+		        ],
+	        ];
 
+	        ob_start();
+	        $this->get_public_template('register-form');
+	        return ob_get_clean();
         }
 
         public function create_rp_step1_form()

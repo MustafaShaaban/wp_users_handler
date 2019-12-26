@@ -1,41 +1,44 @@
-.UH_form .form-control:focus {
-  outline: none;
-  box-shadow: 0 1px 7px 1px rgba(0, 123, 255, .25);
-}
+.UH_form {
+  .form-control:focus {
+    outline: none;
+    box-shadow: 0 1px 7px 1px rgba(0, 123, 255, .25);
+  }
 
-.UH_form .pl-input-wrapper {
-  margin-bottom: 5px;
-}
+  .pl-input-wrapper {
+    margin-bottom: 5px;
 
-.UH_form .pl-input-wrapper label {
-  font-size: 18px;
-  margin-bottom: 0;
-}
+    label {
+      font-size: 18px;
+      margin-bottom: 0;
+    }
 
-.UH_form .pl-input-wrapper .pl-input {
-  height: 36px;
-  font-size: 16px;
-}
+    .pl-input {
+      height: 36px;
+      font-size: 16px;
+    }
 
-.UH_form .form-check {
-  padding-left: 0;
-  padding-right: 0;
-}
-.UH_form .form-check .pl-checkbox {
-  height: auto;
-  display: inline-block;
-  width: auto;
-}
+    .text-muted {
+      font-size: 15px;
+    }
+  }
 
-.UH_form .pl-input-wrapper .text-muted {
-  font-size: 15px;
-}
+  .form-check {
+    padding-left: 0;
+    padding-right: 0;
 
-.UH_form .pl-btn {
-  border-radius: 0;
-  font-size: 16px;
-  padding-top: 7px;
-  padding-bottom: 7px;
+    .pl-checkbox {
+      height: auto;
+      display: inline-block;
+      width: auto;
+    }
+  }
+
+  .pl-btn {
+    border-radius: 0;
+    font-size: 16px;
+    padding-top: 7px;
+    padding-bottom: 7px;
+  }
 }
 
 @import "login";
