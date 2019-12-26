@@ -69,7 +69,7 @@
      */
     define('WP_USERS_HANDLER_VERSION', '1.0.0');
 
-    class Wp_users_handler_basic
+    class Wp_users_handler_Basic
     {
         /**
          * Define the basic functionality of the plugin.
@@ -149,4 +149,4 @@
         }
     }
 
-    new Wp_users_handler_basic();
+    new Wp_users_handler_Basic();

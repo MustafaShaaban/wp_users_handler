@@ -80,4 +80,32 @@
             $this->plugin_version  = WP_USERS_HANDLER_VERSION;
             return $this->plugin_version;
         }
+
+	    public function page_404() {
+		    global $wp_query;
+		    $wp_query->set_404();
+		    status_header( 404 );
+		    get_template_part( 404 );
+		    exit();
+	    }
+
+	    public function get_page_url($name, $type='slug') {
+		    $link = '';
+        	if (!empty($name)) {
+        		switch ($type) {
+			        case 'slug':
+			        	$link = get_permalink( get_page_by_path( $name ) );
+			        	break;
+			        case 'title':
+			        	$link = get_permalink( get_page_by_title( $name ) );
+				        break;
+			        case 'ID':
+			        	$link = get_permalink( $name );
+				        break;
+			        default:
+				        break;
+		        }
+	        }
+		    return $link;
+	    }
     }
