@@ -78,7 +78,7 @@
                     'choices' => [
                         '0' => [
                             'label' => __('Remember me', 'wp_users_handler'),
-                            'name'  => 'rememberme[]',
+                            'name'  => 'rememberme',
                             'value' => 'forever',
                             'order'        => 5
                         ]
@@ -113,6 +113,16 @@
 			        'autocomplete' => 'off',
 			        'order'        => 10
 		        ],
+		        'user_login'    => [
+			        'type'         => 'text',
+			        'label'        => __('Username', 'wp_users_handler'),
+			        'name'         => 'user_login',
+			        'required'     => 'required',
+			        'placeholder'  => __('Username', 'wp_users_handler'),
+			        'autocomplete' => 'off',
+			        'abbr'         => __('Your username should be more than 5 characters', 'wp_users_handler'),
+			        'order'        => 10
+		        ],
 		        'user_password' => [
 			        'type'         => 'password',
 			        'label'        => __('Password', 'wp_users_handler'),
@@ -120,6 +130,7 @@
 			        'required'     => 'required',
 			        'placeholder'  => __('Password', 'wp_users_handler'),
 			        'autocomplete' => 'off',
+			        'abbr'         => __('Your password should be complex', 'wp_users_handler'),
 			        'order'        => 15
 		        ],
 		        'user_password_confirm' => [
@@ -129,6 +140,7 @@
 			        'required'     => 'required',
 			        'placeholder'  => __('Confirm Password', 'wp_users_handler'),
 			        'autocomplete' => 'off',
+			        'abbr'         => __('Passwords must be identical', 'wp_users_handler'),
 			        'order'        => 20
 		        ],
 		        'user_email'    => [
@@ -147,6 +159,7 @@
 			        'required'     => 'required',
 			        'placeholder'  => __('Confirm E-mail Address', 'wp_users_handler'),
 			        'autocomplete' => 'off',
+			        'abbr'         => __('Emails must be identical', 'wp_users_handler'),
 			        'order'        => 30
 		        ],
 	        ];

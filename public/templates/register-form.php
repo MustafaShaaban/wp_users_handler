@@ -22,7 +22,7 @@
 
     <?= do_action($this->plugin_key().'_after_register_form_fields'); ?>
 
-    <?php $form_obj->create_none('nonce', $this->plugin_key()."_LOGIN_FORM"); ?>
+    <?php $form_obj->create_none('nonce', $this->plugin_key()."_REGISTER_FORM"); ?>
 
     <?php $form_obj->form_submit_button(['value' => 'Sign Up', 'class' => 'btn-block']); ?>
 

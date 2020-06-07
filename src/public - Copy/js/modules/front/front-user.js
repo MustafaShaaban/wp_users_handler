@@ -48,6 +48,26 @@ class FrontUser {
     }
 
     register() {
+        let that = this,
+            $login = this.UI.usersUI.reg_form,
+            ajaxRequests = this.Users.ajaxRequests;
+        this.initValidation('login');
+
+        $login.form.on('submit', $login.parent, function (e) {
+            e.preventDefault();
+            let $this = $(e.currentTarget),
+                formData = $this.serializeObject();
+
+            if (typeof ajaxRequests.login !== 'undefined') {
+                ajaxRequests.login.abort();
+            }
+
+            if($this.valid()) {
+                that.Users.loginUser(formData, $this);
+            }
+
+
+        });
     }
 
     rp_sendEmail() {

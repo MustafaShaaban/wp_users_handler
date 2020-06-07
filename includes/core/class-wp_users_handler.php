@@ -68,6 +68,7 @@
             $this->set_locale();
             $this->define_admin_hooks();
             $this->define_public_hooks();
+            $this->loader->add_action('template_redirect', $this, 'restrict_pages');
         }
 
         public static function get_instance()
@@ -127,6 +128,8 @@
              * strings, urls and password.
              */
             require_once $this->plugin_path().'includes/helpers/class-wp_cryptor.php';
+
+            require_once $this->plugin_path().'includes/class-wp_mailer.php';
 
             /**
              * The class responsible for crypt and decrypt
@@ -237,4 +240,24 @@
             return $this->loader;
         }
 
+        public function restrict_pages(){
+        	if(is_user_logged_in() &&
+	           (is_page('uh-account') ||
+	            is_page('uh-account/login') ||
+	            is_page('uh-account/register') ||
+	            is_page('uh-account/forgot-password'))) {
+		        wp_redirect(home_url());
+		        exit();
+	        }
+
+        	if(!is_user_logged_in() &&
+	           (is_page('uh-my-account') ||
+	            is_page('uh-my-account/profile') ||
+	            is_page('uh-my-account/register') ||
+	            is_page('uh-my-account/forgot-password'))) {
+		        wp_redirect(home_url());
+		        exit();
+	        }
+
+        }
     }

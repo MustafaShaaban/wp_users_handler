@@ -2,8 +2,8 @@
 import $ from 'jquery';
 
 // import plugin modules
-import FrontUser from "./fronts/front-user";
-import FrontProfile from "./fronts/front-profile";
+import FrontUser from "./front/front-user";
+import FrontProfile from "./front/front-profile";
 
 class UHPublic {
     constructor() {
@@ -20,8 +20,8 @@ class UHPublic {
             email: phrases.email,
             number: phrases.number,
             equalTo: phrases.equalTo,
-            maxlength: $.validator.format(phrases.maxLength),
-            minlength: $.validator.format(phrases.minLength),
+            maxlength: $.validator.format(phrases.maxlength),
+            minlength: $.validator.format(phrases.minlength),
             max: $.validator.format(phrases.max),
             min: $.validator.format(phrases.min)
         });
@@ -41,35 +41,27 @@ class UHPublic {
 
         $.validator.addMethod(
             "email_regex",
-            function (value, element) {
-                let re = new RegExp(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i);
+            function (value, element, regexp) {
+                var re = new RegExp(regexp);
                 return this.optional(element) || re.test(value);
             },
             phrases.email_regex
         );
         $.validator.addMethod(
             "phone_regex",
-            function (value, element) {
-                let re = new RegExp("^[0-9]{11,16}$");
+            function (value, element, regexp) {
+                var re = new RegExp(regexp);
                 return this.optional(element) || re.test(value);
             },
             phrases.phone_regex
         );
         $.validator.addMethod(
             "password_regex",
-            function (value, element) {
-                let re = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
+            function (value, element, regexp) {
+                var re = new RegExp(regexp);
                 return this.optional(element) || re.test(value);
             },
             phrases.pass_regex
-        );
-        $.validator.addMethod(
-            "regex",
-            function (value, element, regex) {
-                let re = new RegExp(regex);
-                return this.optional(element) || re.test(value);
-            },
-            phrases.minLength
         );
 
 
