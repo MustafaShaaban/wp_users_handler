@@ -40,7 +40,7 @@
   "dependencies": {
     "bootstrap": "^4.4.1",
     "jquery": "^3.4.1",
-    "jquery-validation": "^1.19.1",
+    "jquery-validation": "^1.19.4",
     "lodash": "^4.17.15",
     "materialize-css": "^1.0.0-rc.2"
   }
